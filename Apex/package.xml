@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SObjectModel</fullName>
+    <description>Apex class to make DML operations more extensible and more available</description>
+    <types>
+        <members>SObjectModel</members>
+        <members>SObjectModelTest</members>
+        <name>ApexClass</name>
+    </types>
+    <version>54.0</version>
+</Package>
