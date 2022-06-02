@@ -16,7 +16,7 @@
  * mdl.sqlSelect('Id');
  * mdl.sqlSelect('Name'); // Also can be used like "mdl.sqlSelect('Id, Name')" in a line
  * mdl.sqlWhere('IsDeleted', false);
- * mdl.sqlLike('Name', '%John%'); // In this case, "WHERE" phrase will be concatenated with "AND"
+ * mdl.sqlLike('Name', '%John%'); // In this case, "WHERE" clause will be concatenated with "AND"
  * mdl.sqlOrderBy('Name DESC');
  * mdl.sqlLimit(300);
  * mdl.sqlOffset(100);
@@ -332,46 +332,46 @@ public class SObjectModel {
         if (!sqlFieldSet.isEmpty() && !sqlFieldSet.contains('*')) { // SELECT Sentence
             queryParams.put('field', sqlFieldSet);
         }
-        if (!sqlWhereMapList.isEmpty()) { // WHERE phrase
+        if (!sqlWhereMapList.isEmpty()) { // WHERE clause
             queryParams.put('where', sqlWhereMapList);
         }
-        if (!sqlOrWhereMapList.isEmpty()) { // OR WHERE phrase
+        if (!sqlOrWhereMapList.isEmpty()) { // OR WHERE clause
             queryParams.put('or_where', sqlOrWhereMapList);
         }
-        if (!sqlLikeMapList.isEmpty()) { // LIKE phrase
+        if (!sqlLikeMapList.isEmpty()) { // LIKE clause
             queryParams.put('like', sqlLikeMapList);
         }
-        if (!sqlOrLikeMapList.isEmpty()) { // OR LIKE phrase
+        if (!sqlOrLikeMapList.isEmpty()) { // OR LIKE clause
             queryParams.put('or_like', sqlOrLikeMapList);
         }
-        if (!sqlNotLikeMapList.isEmpty()) { // NOT LIKE phrase
+        if (!sqlNotLikeMapList.isEmpty()) { // NOT LIKE clause
             queryParams.put('not_like', sqlNotLikeMapList);
         }
-        if (!sqlOrNotLikeMapList.isEmpty()) { // OR NOT LIKE phrase
+        if (!sqlOrNotLikeMapList.isEmpty()) { // OR NOT LIKE clause
             queryParams.put('or_not_like', sqlOrNotLikeMapList);
         }
-        if (!sqlWhereInMap.isEmpty()) { // WHERE IN phrase
+        if (!sqlWhereInMap.isEmpty()) { // WHERE IN clause
             queryParams.put('where_in', sqlWhereInMap);
         }
-        if (!sqlWhereNotInMap.isEmpty()) { // WHERE NOT IN phrase
+        if (!sqlWhereNotInMap.isEmpty()) { // WHERE NOT IN clause
             queryParams.put('where_not_in', sqlWhereNotInMap);
         }
-        if (sqlLimitVal != null) { // LIMIT phrase
+        if (sqlLimitVal != null) { // LIMIT clause
             queryParams.put('limit', sqlLimitVal);
         }
-        if (sqlOffsetVal != null) { // OFFSET phrase
+        if (sqlOffsetVal != null) { // OFFSET clause
             queryParams.put('offset', sqlOffsetVal);
         }
-        if (!sqlOrderbyMap.isEmpty()) { // ORDER BY phrase
+        if (!sqlOrderbyMap.isEmpty()) { // ORDER BY clause
             queryParams.put('order_by', sqlOrderbyMap);
         }
-        if (!sqlGroupbySet.isEmpty()) { // GROUP BY phrase
+        if (!sqlGroupbySet.isEmpty()) { // GROUP BY clause
             queryParams.put('group_by', sqlGroupbySet);
         }
-        if (!sqlHavingMapList.isEmpty()) { // HAVING phrase
+        if (!sqlHavingMapList.isEmpty()) { // HAVING clause
             queryParams.put('having', sqlHavingMapList);
         }
-        if (sqlIsAllRows != null) { // ALL ROWS phrase
+        if (sqlIsAllRows != null) { // ALL ROWS clause
             queryParams.put('all_rows', sqlIsAllRows);
         }
         // Return Query Parameters
@@ -448,7 +448,7 @@ public class SObjectModel {
         Set<String> fieldSet;
         Integer i;
         Integer j;
-        // Create SELECT field phrase
+        // Create SELECT field clause
         if (params != null && params.containsKey('field')) { // When field key is set
             fieldSet = (Set<String>)params.get('field');
         } else { // Select all fields when field key is not set
@@ -462,7 +462,7 @@ public class SObjectModel {
             fieldStr += fieldName;
             i++;
         }
-        // Create WHERE phrase
+        // Create WHERE clause
         if (params != null && params.containsKey('where')) {
             whereStr += ' WHERE ';
             i = 0;
@@ -493,11 +493,11 @@ public class SObjectModel {
                 i++;
             }
         }
-        // Create OR WHERE phrase
+        // Create OR WHERE clause
         if (params != null && params.containsKey('or_where')) {
-            if (params.containsKey('where')) { // concatinate by "OR" when "WHERE" phrase already exists
+            if (params.containsKey('where')) { // concatinate by "OR" when "WHERE" clause already exists
                 orWhereStr += ' OR ';
-            } else { // Start with "WHERE" when "WHERE" phrase does not exist
+            } else { // Start with "WHERE" when "WHERE" clause does not exist
                 orWhereStr += ' WHERE ';
             }
             i = 0;
@@ -528,16 +528,16 @@ public class SObjectModel {
                 i++;
             }
         }
-        // Create LIKE phrase
+        // Create LIKE clause
         if (params != null && params.containsKey('like')) {
             if (
                 params.containsKey('where')
                 || params.containsKey('or_where')
                 || params.containsKey('where_in')
                 || params.containsKey('where_not_in')
-            ) { // concatinate by "AND" when "WHERE" phrase already exists
+            ) { // concatinate by "AND" when "WHERE" clause already exists
                 likeStr += ' AND ';
-            } else { // Start with "WHERE" when "WHERE" phrase does not exist
+            } else { // Start with "WHERE" when "WHERE" clause does not exist
                 likeStr += ' WHERE ';
             }
             i = 0;
@@ -557,7 +557,7 @@ public class SObjectModel {
                 i++;
             }
         }
-        // Create OR LIKE phrase
+        // Create OR LIKE clause
         if (params != null && params.containsKey('or_like')) {
             if (
                 params.containsKey('where')
@@ -565,9 +565,9 @@ public class SObjectModel {
                 || params.containsKey('where_in')
                 || params.containsKey('where_not_in')
                 || params.containsKey('like')
-            ) { // concatinate by "OR" when "WHERE" phrase already exists
+            ) { // concatinate by "OR" when "WHERE" clause already exists
                 orLikeStr += ' OR ';
-            } else { // Start with "WHERE" when "WHERE" phrase does not exist
+            } else { // Start with "WHERE" when "WHERE" clause does not exist
                 orLikeStr += ' WHERE ';
             }
             i = 0;
@@ -597,13 +597,13 @@ public class SObjectModel {
                 || params.containsKey('where_not_in')
                 || params.containsKey('like')
                 || params.containsKey('or_like')
-            ) { // concatinate by "AND" when "WHERE" phrase already exists
+            ) { // concatinate by "AND" when "WHERE" clause already exists
                 notLikeStr += ' AND ';
                 isPlural = true;
             } else if (params.containsKey('or_not_like')) {
                 notLikeStr += ' WHERE ';
                 isPlural = true;
-            } else { // Start with "WHERE" when "WHERE" phrase does not exist
+            } else { // Start with "WHERE" when "WHERE" clause does not exist
                 notLikeStr += ' WHERE ';
             }
             i = 0;
@@ -630,7 +630,7 @@ public class SObjectModel {
                 i++;
             }
         }
-        // Create OR NOT LIKE phrase
+        // Create OR NOT LIKE clause
         if (params != null && params.containsKey('or_not_like')) {
             Boolean isPlural = false;
             if (
@@ -641,10 +641,10 @@ public class SObjectModel {
                 || params.containsKey('like')
                 || params.containsKey('or_like')
                 || params.containsKey('not_like')
-            ) { // concatinate by "OR" when "WHERE" phrase already exists
+            ) { // concatinate by "OR" when "WHERE" clause already exists
                 orNotLikeStr += ' OR ';
                 isPlural = true;
-            } else { // Start with "WHERE" when "WHERE" phrase does not exist
+            } else { // Start with "WHERE" when "WHERE" clause does not exist
                 orNotLikeStr += ' WHERE ';
             }
             i = 0;
@@ -671,11 +671,11 @@ public class SObjectModel {
                 i++;
             }
         }
-        // Create WHERE IN phrase
+        // Create WHERE IN clause
         if (params != null && params.containsKey('where_in')) {
-            if (params.containsKey('where') || params.containsKey('or_where')) { // concatinate by "AND" when "WHERE" phrase already exists
+            if (params.containsKey('where') || params.containsKey('or_where')) { // concatinate by "AND" when "WHERE" clause already exists
                 whereInStr += ' AND ';
-            } else { // Start with "WHERE" when "WHERE" phrase does not exist
+            } else { // Start with "WHERE" when "WHERE" clause does not exist
                 whereInStr += ' WHERE ';
             }
             i = 0;
@@ -714,11 +714,11 @@ public class SObjectModel {
                 i++;
             }
         }
-        // Create WHERE NOT IN phrase
+        // Create WHERE NOT IN clause
         if (params != null && params.containsKey('where_not_in')) {
-            if (params.containsKey('where') || params.containsKey('or_where') || params.containsKey('where_in')) { // concatinate by "AND" when "WHERE" phrase already exists
+            if (params.containsKey('where') || params.containsKey('or_where') || params.containsKey('where_in')) { // concatinate by "AND" when "WHERE" clause already exists
                 whereNotInStr += ' AND ';
-            } else { // Start with "WHERE" when "WHERE" phrase does not exist
+            } else { // Start with "WHERE" when "WHERE" clause does not exist
                 whereNotInStr += ' WHERE ';
             }
             i = 0;
@@ -757,17 +757,17 @@ public class SObjectModel {
                 i++;
             }
         }
-        // Create LIMIT phrase
+        // Create LIMIT clause
         if (params != null && params.containsKey('limit')) {
             limitStr += ' LIMIT ';
             limitStr += String.valueOf(params.get('limit'));
         }
-        // Create OFFET phrase
+        // Create OFFET clause
         if (params != null && params.containsKey('offset')) {
             offsetStr += ' OFFSET ';
             offsetStr += String.valueOf(params.get('offset'));
         }
-        // Create ORDER BY phrase
+        // Create ORDER BY clause
         if (params != null && params.containsKey('order_by')) {
             Map<String, String> conditions = (Map<String, String>)params.get('order_by');
             orderbyStr += ' ORDER BY ';
@@ -781,7 +781,7 @@ public class SObjectModel {
                 i++;
             }
         }
-        // Create GROUP BY phrase
+        // Create GROUP BY clause
         if (params != null && params.containsKey('group_by')) {
             Set<String> conditions = (Set<String>)params.get('group_by');
             groupbyStr += ' GROUP BY ';
@@ -794,7 +794,7 @@ public class SObjectModel {
                 i++;
             }
         }
-        // Create HAVING phrase
+        // Create HAVING clause
         if (params != null && params.containsKey('having')) {
             havingStr += ' HAVING ';
             i = 0;
@@ -825,7 +825,7 @@ public class SObjectModel {
                 i++;
             }
         }
-        // Create ALL ROWS phrase
+        // Create ALL ROWS clause
         if (params != null && params.containsKey('all_rows')) {
             Boolean isAllRows = (Boolean)params.get('all_rows');
             allRowsStr += isAllRows ? ' ALL ROWS' : '';

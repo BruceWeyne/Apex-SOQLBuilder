@@ -61,7 +61,7 @@ mdl.sqlSelect('Id');
 mdl.sqlSelect('Name');
 mdl.sqlSelect('IsActive');
 
-// The following SELECT phrase will be reserved for its generation when the method is called like above.
+// The following SELECT clause will be reserved for its generation when the method is called like above.
 // SELECT Id, Name, IsActive
 ```
 
@@ -74,7 +74,7 @@ Example for use - 1
 ```apex
 mdl.sqlWhere('Id', '00s4h00000216cCDXW');
 
-// The following WHERE phrase will be reserved for its generation when the method is called like above.
+// The following WHERE clause will be reserved for its generation when the method is called like above.
 // WHERE Id = '00s4h00000216cCDXW'
 ```
 
@@ -117,7 +117,7 @@ Example for use - 1
 ```apex
 mdl.sqlLike('Name', '%Misaka%');
 
-// The following LIKE phrase will be reserved for its generation when the method is called like above.
+// The following LIKE clause will be reserved for its generation when the method is called like above.
 // WHERE Name LIKE %Misaka%;
 ```
 
@@ -152,7 +152,7 @@ Example for use - 1
 ```apex
 mdl.sqlNotLike('Name', '%Shirai%');
 
-// The following NOT LIKE phrase will be reserved for its generation when the method is called like above.
+// The following NOT LIKE clause will be reserved for its generation when the method is called like above.
 // WHERE NOT Name LIKE %Shirai%;
 ```
 
@@ -192,7 +192,7 @@ mdl.sqlWhereIn('Id', '\'00s4h00000216cCDXW\', \'00s5h00000336cFSRH\', \'00s7h000
 Set<String> param = new Set<String>{'00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC'};
 mdl.sqlWhereIn('Id', param);
 
-// The following WHERE IN phrase will be reserved for its generation when the method is called like above.
+// The following WHERE IN clause will be reserved for its generation when the method is called like above.
 // WHERE Id IN ('00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC')
 ```
 
@@ -210,7 +210,7 @@ mdl.sqlWhereNotIn('Id', '\'00s4h00000216cCDXW\', \'00s5h00000336cFSRH\', \'00s7h
 Set<String> param = new Set<String>{'00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC'};
 mdl.sqlWhereNotIn('Id', param);
 
-// The following WHERE NOT IN phrase will be reserved for its generation when the method is called like above.
+// The following WHERE NOT IN clause will be reserved for its generation when the method is called like above.
 // WHERE Id NOT IN ('00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC')
 ```
 
@@ -223,7 +223,7 @@ Example for use
 ```apex
 mdl.sqlLimit(300);
 
-// The following LIMIT phrase will be reserved for its generation when the method is called like above.
+// The following LIMIT clause will be reserved for its generation when the method is called like above.
 // LIMIT 300
 ```
 
@@ -235,7 +235,7 @@ mdl.sqlOffset(offsetValue);
 ```apex
 mdl.sqlOffset(100);
 
-// The following OFFSET phrase will be reserved for its generation when the method is called like above.
+// The following OFFSET clause will be reserved for its generation when the method is called like above.
 // OFFSET 100
 ```
 
@@ -249,7 +249,7 @@ Example for use
 mdl.sqlOrderBy('Name', 'DESC');
 mdl.sqlOrderBy('Id', 'ASC');
 
-// The following OEDER BY phrase will be reserved for its generation when the method is called like above.
+// The following OEDER BY clause will be reserved for its generation when the method is called like above.
 // ORDER BY Name DESC, Id ASC
 ```
 
@@ -263,7 +263,7 @@ Example for use - 1
 mdl.sqlGroupBy('Name');
 mdl.sqlGroupBy('IsActive');
 
-// The following GROUP BY phrase will be reserved for its generation when the method is called like above.
+// The following GROUP BY clause will be reserved for its generation when the method is called like above.
 // GROUP BY Name, IsActive;
 ```
 
@@ -286,7 +286,7 @@ Example for use - 1
 ```apex
 mdl.sqlHaving('COUNT(Id)', 3);
 
-// The following HAVING phrase will be reserved for its generation when the method is called like above.
+// The following HAVING clause will be reserved for its generation when the method is called like above.
 // HAVING COUNT(Id) = 3
 ```
 
