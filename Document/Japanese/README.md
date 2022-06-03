@@ -39,7 +39,7 @@
 
 # クラスの呼び出し（インスタンスの生成）
 ```apex
-SObjectModel mdl = new SObjectModel(); // 変数名は任意、ここでは mdl
+SOQLBuilder mdl = new SOQLBuilder(); // 変数名は任意、ここでは mdl
 ```
 
 # SQL 構文メソッド
@@ -824,7 +824,7 @@ List<Account> accList = [
 
 ## 例4
 ```apex
-SObjectModel mdl = new SObjectModel();
+SOQLBuilder mdl = new SOQLBuilder();
 
 RestRequest req = RestContext.request; // Rest API Context
 
@@ -857,16 +857,16 @@ if (! (Boolean)result.get('success') ) { // 失敗の場合
 一度の処理で複数の sObject 操作を行う場合、大きく分けて 2 つの方法がある。
 ## ① 各 sObject の処理ごとにクラスを呼び出す
 ```apex
-SObjectModel mdl_1 = new SObjectModel(); // mdl_1 インスタンスの生成
+SOQLBuilder mdl_1 = new SOQLBuilder(); // mdl_1 インスタンスの生成
 mdl_1.sqlSelect('Id, Name');
 List<User> user = mdl_1.sqlGet('User');
 
-SObjectModel mdl_2 = new SObjectModel(); // mdl_2 インスタンスの生成
+SOQLBuilder mdl_2 = new SOQLBuilder(); // mdl_2 インスタンスの生成
 mdl_2.sqlSelect('Id, Name');
 mdl_2.sqlWhere('Id', '00s4h00000216cCDXW');
 List<Account> acc = mdl_2.sqlGet('Account');
 
-SObjectModel mdl_3 = new SObjectModel(); // mdl_3 インスタンスの生成
+SOQLBuilder mdl_3 = new SOQLBuilder(); // mdl_3 インスタンスの生成
 mdl_3.sqlSelect('Id, Name');
 mdl_3.sqlLimit(20);
 List<Contact> con = mdl_3.sqlGet('Contact');
@@ -877,7 +877,7 @@ SQL 構文メソッドは、クエリが実行される度に初期化される�
 
 ## ② sqlGet, sqlQuery メソッドのコール後はクエリが初期化される
 ```apex
-SObjectModel mdl = new SObjectModel(); // mdl インスタンスの生成（ここで1度だけ）
+SOQLBuilder mdl = new SOQLBuilder(); // mdl インスタンスの生成（ここで1度だけ）
 
 mdl.sqlSelect('Id, Name');
 List<User> user = mdl.sqlGet('User'); // ここでクエリも初期化

@@ -1,6 +1,6 @@
 /******************************************************************************************************
-* This file is part of the Apex SObjectModel project, released under the MIT License.                 *
-* See LICENSE file or go to https://github.com/BruceWeyne/Apex-SObjectModel for full license details. *
+* This file is part of the Apex SOQLBuilder project, released under the MIT License.                 *
+* See LICENSE file or go to https://github.com/BruceWeyne/Apex-SOQLBuilder for full license details. *
 ******************************************************************************************************/
 
 /**
@@ -12,7 +12,7 @@
  * /////////////////////////////
  *  Example for use of "SQL Construction" Methods
  * /////////////////////////////
- * SObjectModel mdl = new SObjectModel();
+ * SOQLBuilder mdl = new SOQLBuilder();
  * mdl.sqlSelect('Id');
  * mdl.sqlSelect('Name'); // Also can be used like "mdl.sqlSelect('Id, Name')" in a line
  * mdl.sqlWhere('IsDeleted', false);
@@ -26,7 +26,7 @@
  * List<Account> acc = [SELECT Id, Name From Account WHERE IsDeleted = false AND Name LIKE '%John%' ORDER BY Name DESC LIMIT 300 OFFSET 100];
  */
 
-public class SObjectModel {
+public class SOQLBuilder {
     private List<Map<String, Object>> sqlWhereMapList;
     private List<Map<String, Object>> sqlOrWhereMapList;
     private List<Map<String, Object>> sqlLikeMapList;
@@ -46,7 +46,7 @@ public class SObjectModel {
     private Boolean sqlDebugWhenExecuted;
 
     // Constructor
-    public SObjectModel() {
+    public SOQLBuilder() {
         this.clear();
         sqlDebugWhenExecuted = false; // true: Query is debugged on the Developer Console's Log EVERY TIME executed | false: Not debugged
     }
@@ -1132,7 +1132,7 @@ public class SObjectModel {
      * @return void
      * Execute insert/update/upsert for the sObject record after this method is called
      * [Example for use]
-     * SObjectModel mdl = new SObjectModel();
+     * SOQLBuilder mdl = new SOQLBuilder();
      * Account acc = new Account();
      * Map<String, Object> param = new Map<String, Object>{'Name' => 'Misaka', 'BillingCity' => 'Academic city', 'BillingCountry' => 'Japan', 'BillingState' => 'Tokyo', 'NumberOfEmployees' => 100};
      * mdl.setSObjParams(acc, param);
