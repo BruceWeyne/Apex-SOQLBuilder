@@ -147,6 +147,53 @@ List<Account> accList = [
 ## Sample 4
 ```apex
 SOQLBuilder sb = new SOQLBuilder();
+RestRequest req = RestContext.request;
+
+// Get URL Query Parameters
+Integer limitVal  = (Integer)req.params.get('limit');
+Integer offsetVal = (Integer)req.params.get('offset');
+
+// Construct SOQL Query
+sb.sqlSelect('Id, Name, Phone');
+
+// Only when parameters are set
+if (limitVal != null) { // When Not null
+    sb.sqlLimit(limitVal);
+}
+if (offsetVal != null) { // When Not null
+    sb.sqlOffset(offsetVal);
+}
+
+// Execute Query
+List<Account> accList = sb.sqlGet('Account');
+```
+
+The method call like above is exactly the same thing as following.
+
+```apex
+SOQLBuilder sb = new SOQLBuilder();
+RestRequest req = RestContext.request;
+
+// Get URL Query Parameters
+Integer limitVal  = (Integer)req.params.get('limit');
+Integer offsetVal = (Integer)req.params.get('offset');
+
+// Have to describe SOQL queries for all patters of conditions
+List<Account> accList = new List<Account>();
+if (limitVal != null && offsetVal != null) {
+    List<Account> accList = [SELECT Id, Name, Phone FROM Account LIMIT :limitVal OFFSET :offsetVal];
+} else if (limitVal != null && offsetVal == null) {
+    List<Account> accList = [SELECT Id, Name, Phone FROM Account LIMIT :limitVal];
+} else if (limitVal == null && offsetVal != null) {
+    List<Account> accList = [SELECT Id, Name, Phone FROM Account OFFSET :offsetVal];
+} else {
+    List<Account> accList = [SELECT Id, Name, Phone FROM Account];
+}
+```
+
+## Sample 5
+```apex
+SOQLBuilder sb = new SOQLBuilder();
 
 RestRequest req = RestContext.request; // Rest API Context
 
@@ -302,7 +349,54 @@ List<Account> accList = [
 ];
 ```
 
-## 例4
+## 例 4
+```apex
+SOQLBuilder sb = new SOQLBuilder();
+RestRequest req = RestContext.request;
+
+// URL クエリパラメータを取得
+Integer limitVal  = (Integer)req.params.get('limit');
+Integer offsetVal = (Integer)req.params.get('offset');
+
+// SOQL クエリの構築
+sb.sqlSelect('Id, Name, Phone');
+
+// URL クエリパラメータが設定されている場合のみ
+if (limitVal != null) { // When Not null
+    sb.sqlLimit(limitVal);
+}
+if (offsetVal != null) { // When Not null
+    sb.sqlOffset(offsetVal);
+}
+
+// クエリを実行
+List<Account> accList = sb.sqlGet('Account');
+```
+
+The method call like above is exactly the same thing as following.
+
+```apex
+SOQLBuilder sb = new SOQLBuilder();
+RestRequest req = RestContext.request;
+
+// URL クエリパラメータを取得
+Integer limitVal  = (Integer)req.params.get('limit');
+Integer offsetVal = (Integer)req.params.get('offset');
+
+// 全ての条件パターンで SOQL クエリを記述しなければならない
+List<Account> accList = new List<Account>();
+if (limitVal != null && offsetVal != null) {
+    List<Account> accList = [SELECT Id, Name, Phone FROM Account LIMIT :limitVal OFFSET :offsetVal];
+} else if (limitVal != null && offsetVal == null) {
+    List<Account> accList = [SELECT Id, Name, Phone FROM Account LIMIT :limitVal];
+} else if (limitVal == null && offsetVal != null) {
+    List<Account> accList = [SELECT Id, Name, Phone FROM Account OFFSET :offsetVal];
+} else {
+    List<Account> accList = [SELECT Id, Name, Phone FROM Account];
+}
+```
+
+## 例5
 ```apex
 SOQLBuilder sb = new SOQLBuilder();
 
