@@ -1,14 +1,14 @@
 /******************************************************************************************************
-* This file is part of the Apex SObjectModel project, released under the MIT License.                 *
-* See LICENSE file or go to https://github.com/BruceWeyne/Apex-SObjectModel for full license details. *
+* This file is part of the Apex SOQLBuilder project, released under the MIT License.                 *
+* See LICENSE file or go to https://github.com/BruceWeyne/Apex-SOQLBuilder for full license details. *
 ******************************************************************************************************/
 
 /**
  * Author  : BruceWeyne, Taku H.F.
- * Purpose : Unit test for SObjectModel class
+ * Purpose : Unit test for SOQLBuilder class
 */
 @isTest
-public class SObjectModelTest {
+public class SOQLBuilderTest {
 
     @testSetup
     static void setUpMethod() {
@@ -22,7 +22,7 @@ public class SObjectModelTest {
 
     @isTest
     static void testSqlGet() {
-        SObjectModel mdl = new SObjectModel();
+        SOQLBuilder mdl = new SOQLBuilder();
 
         mdl.sqlSelect('Id, Name');
         mdl.sqlWhere('Id !=', '00s4h00000216cAAAA');
@@ -163,7 +163,7 @@ public class SObjectModelTest {
 
     @isTest
     static void testCreateQueryStr() {
-        SObjectModel mdl = new SObjectModel();
+        SOQLBuilder mdl = new SOQLBuilder();
 
         mdl.sqlSelect('*');
         mdl.sqlNotLike('Name', '%Mi%');
@@ -287,7 +287,7 @@ public class SObjectModelTest {
         Set<Id> setId             = new Set<Id>();
         Object invalidInput       = null;
 
-        SObjectModel mdl = new SObjectModel();
+        SOQLBuilder mdl = new SOQLBuilder();
 
         Object targetSetString    = mdl.convertToSetTypeStr(setString);
         Object targetSetInteger   = mdl.convertToSetTypeStr(setInteger);
@@ -314,7 +314,7 @@ public class SObjectModelTest {
 
     @isTest
     static void testSqlInsert() {
-        SObjectModel mdl = new SObjectModel();
+        SOQLBuilder mdl = new SOQLBuilder();
         Map<String, Object> params = new Map<String, Object>{};
         Map<String, Object> result = new Map<String, Object>{};
 
@@ -356,7 +356,7 @@ public class SObjectModelTest {
 
     @isTest
     static void testSqlInsertAll() {
-        SObjectModel mdl = new SObjectModel();
+        SOQLBuilder mdl = new SOQLBuilder();
         Map<String, Object> params = new Map<String, Object>{};
         Map<String, Object> result = new Map<String, Object>{};
 
@@ -397,7 +397,7 @@ public class SObjectModelTest {
 
     @isTest
     static void testSqlUpdate() {
-        SObjectModel mdl = new SObjectModel();
+        SOQLBuilder mdl = new SOQLBuilder();
         Map<String, Object> params = new Map<String, Object>{};
         Map<String, Object> result = new Map<String, Object>{};
 
@@ -426,7 +426,7 @@ public class SObjectModelTest {
 
     @isTest
     static void testSqlUpdateAll() {
-        SObjectModel mdl = new SObjectModel();
+        SOQLBuilder mdl = new SOQLBuilder();
         Map<String, Object> params = new Map<String, Object>{};
         Map<String, Object> result = new Map<String, Object>{};
 
@@ -454,7 +454,7 @@ public class SObjectModelTest {
 
     @isTest
     static void testSqlUpsert() {
-        SObjectModel mdl = new SObjectModel();
+        SOQLBuilder mdl = new SOQLBuilder();
         Map<String, Object> params = new Map<String, Object>{};
         Map<String, Object> result = new Map<String, Object>{};
 
@@ -494,7 +494,7 @@ public class SObjectModelTest {
 
     @isTest
     static void testSqlDelete() {
-        SObjectModel mdl = new SObjectModel();
+        SOQLBuilder mdl = new SOQLBuilder();
         Map<String, Object> result = new Map<String, Object>{};
 
         // Single
@@ -522,7 +522,7 @@ public class SObjectModelTest {
 
     @isTest
     static void testSetSObjParams() {
-        SObjectModel mdl = new SObjectModel();
+        SOQLBuilder mdl = new SOQLBuilder();
         Map<String, Object> params = new Map<String, Object>{};
 
         Account sObj = new Account();

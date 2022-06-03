@@ -39,7 +39,7 @@ Read the Sample of usage section first, and refer to others for actual use.
 
 # Call class to generate instance
 ```apex
-SObjectModel mdl = new SObjectModel(); // Any variable names is possible, "mdl" on this case here
+SOQLBuilder mdl = new SOQLBuilder(); // Any variable names is possible, "mdl" on this case here
 ```
 
 # SQL Construction Method
@@ -824,7 +824,7 @@ List<Account> accList = [
 
 ## Sample 4
 ```apex
-SObjectModel mdl = new SObjectModel();
+SOQLBuilder mdl = new SOQLBuilder();
 
 RestRequest req = RestContext.request; // Rest API Context
 
@@ -858,16 +858,16 @@ There are two ways to use those methods more than once at one transaction.
 
 ## 1. Generate new instance every time getting sObject records.
 ```apex
-SObjectModel mdl_1 = new SObjectModel(); // mdl_1 to generate new instance
+SOQLBuilder mdl_1 = new SOQLBuilder(); // mdl_1 to generate new instance
 mdl_1.sqlSelect('Id, Name');
 List<User> user = mdl_1.sqlGet('User');
 
-SObjectModel mdl_2 = new SObjectModel(); // mdl_2 to generate new instance
+SOQLBuilder mdl_2 = new SOQLBuilder(); // mdl_2 to generate new instance
 mdl_2.sqlSelect('Id, Name');
 mdl_2.sqlWhere('Id', '00s4h00000216cCDXW');
 List<Account> acc = mdl_2.sqlGet('Account');
 
-SObjectModel mdl_3 = new SObjectModel(); // mdl_3 to generate new instance
+SOQLBuilder mdl_3 = new SOQLBuilder(); // mdl_3 to generate new instance
 mdl_3.sqlSelect('Id, Name');
 mdl_3.sqlLimit(20);
 List<Contact> con = mdl_3.sqlGet('Contact');
@@ -878,7 +878,7 @@ The SQL Construction Method basically initializes itself after sqlGet / sqlQuery
 
 ## 2. Query will be initialized after sqlGet / sqlQuery method is called
 ```apex
-SObjectModel mdl = new SObjectModel(); // mdl to generate instance, only once here
+SOQLBuilder mdl = new SOQLBuilder(); // mdl to generate instance, only once here
 
 mdl.sqlSelect('Id, Name');
 List<User> user = mdl.sqlGet('User'); // Query is also initialized here
