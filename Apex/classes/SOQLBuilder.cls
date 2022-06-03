@@ -12,15 +12,15 @@
  * /////////////////////////////
  *  Example for use of "SQL Construction" Methods
  * /////////////////////////////
- * SOQLBuilder mdl = new SOQLBuilder();
- * mdl.sqlSelect('Id');
- * mdl.sqlSelect('Name'); // Also can be used like "mdl.sqlSelect('Id, Name')" in a line
- * mdl.sqlWhere('IsDeleted', false);
- * mdl.sqlLike('Name', '%John%'); // In this case, "WHERE" clause will be concatenated with "AND"
- * mdl.sqlOrderBy('Name DESC');
- * mdl.sqlLimit(300);
- * mdl.sqlOffset(100);
- * List<Account> acc = mdl.sqlGet('Account'); // Query constructed above ends up executed here, and it returns data of List<sObject> type
+ * SOQLBuilder sb = new SOQLBuilder();
+ * sb.sqlSelect('Id');
+ * sb.sqlSelect('Name'); // Also can be used like "sb.sqlSelect('Id, Name')" in a line
+ * sb.sqlWhere('IsDeleted', false);
+ * sb.sqlLike('Name', '%John%'); // In this case, "WHERE" clause will be concatenated with "AND"
+ * sb.sqlOrderBy('Name DESC');
+ * sb.sqlLimit(300);
+ * sb.sqlOffset(100);
+ * List<Account> acc = sb.sqlGet('Account'); // Query constructed above ends up executed here, and it returns data of List<sObject> type
  *
  * Scripts above is completely the same as following,
  * List<Account> acc = [SELECT Id, Name From Account WHERE IsDeleted = false AND Name LIKE '%John%' ORDER BY Name DESC LIMIT 300 OFFSET 100];
@@ -1132,10 +1132,10 @@ public class SOQLBuilder {
      * @return void
      * Execute insert/update/upsert for the sObject record after this method is called
      * [Example for use]
-     * SOQLBuilder mdl = new SOQLBuilder();
+     * SOQLBuilder sb = new SOQLBuilder();
      * Account acc = new Account();
      * Map<String, Object> param = new Map<String, Object>{'Name' => 'Misaka', 'BillingCity' => 'Academic city', 'BillingCountry' => 'Japan', 'BillingState' => 'Tokyo', 'NumberOfEmployees' => 100};
-     * mdl.setSObjParams(acc, param);
+     * sb.setSObjParams(acc, param);
      */
     public void setSObjParams(sObject sObj, Map<String, Object> params) {
         Object eachParam;

@@ -39,7 +39,7 @@ Read the Sample of usage section first, and refer to others for actual use.
 
 # Call class to generate instance
 ```apex
-SOQLBuilder mdl = new SOQLBuilder(); // Any variable names is possible, "mdl" on this case here
+SOQLBuilder sb = new SOQLBuilder(); // Any variable names is possible, "sb" on this case here
 ```
 
 # SQL Construction Method
@@ -48,18 +48,18 @@ Those methods are used for getting records from sObject.
 
 ## SELECT Construction Method
 ```apex
-mdl.sqlSelect(fieldName);
+sb.sqlSelect(fieldName);
 ```
 
 Example for use
 ```apex
-mdl.sqlSelect('Id, Name, IsActive');
+sb.sqlSelect('Id, Name, IsActive');
 
 // or in another way,
 
-mdl.sqlSelect('Id');
-mdl.sqlSelect('Name');
-mdl.sqlSelect('IsActive');
+sb.sqlSelect('Id');
+sb.sqlSelect('Name');
+sb.sqlSelect('IsActive');
 
 // The following SELECT clause will be reserved for its generation when the method is called like above.
 // SELECT Id, Name, IsActive
@@ -67,19 +67,19 @@ mdl.sqlSelect('IsActive');
 
 ## WHERE Construction Method
 ```apex
-mdl.sqlWhere(fieldName, fieldValue);
+sb.sqlWhere(fieldName, fieldValue);
 ```
 
 Example for use - 1
 ```apex
-mdl.sqlWhere('Id', '00s4h00000216cCDXW');
+sb.sqlWhere('Id', '00s4h00000216cCDXW');
 
 // The following WHERE clause will be reserved for its generation when the method is called like above.
 // WHERE Id = '00s4h00000216cCDXW'
 ```
 
 ```apex
-mdl.sqlWhere('Id !=', '00s4h00000216cCDXW');
+sb.sqlWhere('Id !=', '00s4h00000216cCDXW');
 
 // Comparative operators can be contained into keys of the 1st argument, which needs to add space between them.
 // WHERE Id != '00s4h00000216cCDXW'
@@ -87,8 +87,8 @@ mdl.sqlWhere('Id !=', '00s4h00000216cCDXW');
 
 Example for use - 2
 ```apex
-mdl.sqlWhere('Name', 'Mikoto Misaka');
-mdl.sqlWhere('IsActive', true);
+sb.sqlWhere('Name', 'Mikoto Misaka');
+sb.sqlWhere('IsActive', true);
 
 // Conditions will be concatinated by "AND" when the method is called more than once.
 // WHERE Name = 'Mikoto Misaka' AND IsActive = true
@@ -96,26 +96,26 @@ mdl.sqlWhere('IsActive', true);
 
 ## OR WHERE Construction Method
 ```apex
-mdl.sqlOrWhere(fieldName, fieldValue);
+sb.sqlOrWhere(fieldName, fieldValue);
 ```
 
 Example for use
 ```
-mdl.sqlWhere('Name', 'Mikoto Misaka');
-mdl.sqlOrWhere('IsActive', false);
-mdl.sqlOrWhere('Email !=', 'kuroko.shirai@tokiwa.ac.jp');
+sb.sqlWhere('Name', 'Mikoto Misaka');
+sb.sqlOrWhere('IsActive', false);
+sb.sqlOrWhere('Email !=', 'kuroko.shirai@tokiwa.ac.jp');
 
 // WHERE Name = 'Mikoto Misaka' OR IsActive = false OR Email != 'kuroko.shirai@tokiwa.ac.jp'
 ```
 
 ## LIKE Construction Method
 ```apex
-mdl.sqlLike(fieldName, fieldValue);
+sb.sqlLike(fieldName, fieldValue);
 ```
 
 Example for use - 1
 ```apex
-mdl.sqlLike('Name', '%Misaka%');
+sb.sqlLike('Name', '%Misaka%');
 
 // The following LIKE clause will be reserved for its generation when the method is called like above.
 // WHERE Name LIKE %Misaka%;
@@ -123,8 +123,8 @@ mdl.sqlLike('Name', '%Misaka%');
 
 Example for use - 2
 ```apex
-mdl.sqlLike('Name', '%Misaka%');
-mdl.sqlLike('Name', '%koto%');
+sb.sqlLike('Name', '%Misaka%');
+sb.sqlLike('Name', '%koto%');
 
 // Conditions will be concatinated by "AND" when the method is called more than once.
 // WHERE Name LIKE %Misaka% AND LIKE %koto%;
@@ -132,25 +132,25 @@ mdl.sqlLike('Name', '%koto%');
 
 ## OR LIKE Construction Method
 ```apex
-mdl.sqlOrLike(fieldName, fieldValue);
+sb.sqlOrLike(fieldName, fieldValue);
 ```
 
 Example for use
 ```apex
-mdl.sqlLike('Name', '%Misaka%');
-mdl.sqlOrLike('Name', '%koto%');
+sb.sqlLike('Name', '%Misaka%');
+sb.sqlOrLike('Name', '%koto%');
 
 // WHERE Name LIKE %Misaka% OR LIKE %koto%;
 ```
 
 ## NOT LIKE Construction Method
 ```apex
-mdl.sqlNotLike(fieldName, fieldValue);
+sb.sqlNotLike(fieldName, fieldValue);
 ```
 
 Example for use - 1
 ```apex
-mdl.sqlNotLike('Name', '%Shirai%');
+sb.sqlNotLike('Name', '%Shirai%');
 
 // The following NOT LIKE clause will be reserved for its generation when the method is called like above.
 // WHERE NOT Name LIKE %Shirai%;
@@ -158,8 +158,8 @@ mdl.sqlNotLike('Name', '%Shirai%');
 
 Example for use - 2
 ```apex
-mdl.sqlNotLike('Name', '%Shirai%');
-mdl.sqlNotLike('Name', '%Kuro%');
+sb.sqlNotLike('Name', '%Shirai%');
+sb.sqlNotLike('Name', '%Kuro%');
 
 // Conditions will be concatinated by "AND" when the method is called more than once.
 // WHERE (NOT Name LIKE %Shirai%) AND (NOT LIKE %Kuro%);
@@ -167,30 +167,30 @@ mdl.sqlNotLike('Name', '%Kuro%');
 
 ## OR NOT LIKE Construction Method
 ```apex
-mdl.sqlOrNotLike(fieldName, fieldValue);
+sb.sqlOrNotLike(fieldName, fieldValue);
 ```
 
 Example for use
 ```apex
-mdl.sqlLike('Name', '%Misaka%');
-mdl.sqlOrNotLike('Name', '%Shirai%');
+sb.sqlLike('Name', '%Misaka%');
+sb.sqlOrNotLike('Name', '%Shirai%');
 
 // WHERE Name LIKE %Misaka% OR (NOT LIKE %Shirai%);
 ```
 
 ## WHERE IN Construction Method
 ```apex
-mdl.sqlWhereIn(fieldName, fieldValue); // fieldValue is also possible as Set type
+sb.sqlWhereIn(fieldName, fieldValue); // fieldValue is also possible as Set type
 ```
 
 Example for use
 ```apex
-mdl.sqlWhereIn('Id', '\'00s4h00000216cCDXW\', \'00s5h00000336cFSRH\', \'00s7h00000686cJYZC\''); // Escape handling is necessary when String type
+sb.sqlWhereIn('Id', '\'00s4h00000216cCDXW\', \'00s5h00000336cFSRH\', \'00s7h00000686cJYZC\''); // Escape handling is necessary when String type
 
 // or more specifically,
 
 Set<String> param = new Set<String>{'00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC'};
-mdl.sqlWhereIn('Id', param);
+sb.sqlWhereIn('Id', param);
 
 // The following WHERE IN clause will be reserved for its generation when the method is called like above.
 // WHERE Id IN ('00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC')
@@ -198,17 +198,17 @@ mdl.sqlWhereIn('Id', param);
 
 ## WHERE NOT IN Construction Method
 ```apex
-mdl.sqlWhereNotIn(fieldName, fieldValue); // fieldValue is also possible as Set type
+sb.sqlWhereNotIn(fieldName, fieldValue); // fieldValue is also possible as Set type
 ```
 
 Example for use
 ```apex
-mdl.sqlWhereNotIn('Id', '\'00s4h00000216cCDXW\', \'00s5h00000336cFSRH\', \'00s7h00000686cJYZC\''); // Escape handling is necessary when String type
+sb.sqlWhereNotIn('Id', '\'00s4h00000216cCDXW\', \'00s5h00000336cFSRH\', \'00s7h00000686cJYZC\''); // Escape handling is necessary when String type
 
 // or more specifically,
 
 Set<String> param = new Set<String>{'00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC'};
-mdl.sqlWhereNotIn('Id', param);
+sb.sqlWhereNotIn('Id', param);
 
 // The following WHERE NOT IN clause will be reserved for its generation when the method is called like above.
 // WHERE Id NOT IN ('00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC')
@@ -216,12 +216,12 @@ mdl.sqlWhereNotIn('Id', param);
 
 ## LIMIT Construction Method
 ```apex
-mdl.sqlLimit(limitValue);
+sb.sqlLimit(limitValue);
 ```
 
 Example for use
 ```apex
-mdl.sqlLimit(300);
+sb.sqlLimit(300);
 
 // The following LIMIT clause will be reserved for its generation when the method is called like above.
 // LIMIT 300
@@ -229,11 +229,11 @@ mdl.sqlLimit(300);
 
 ## OFFSET Construction Method
 ```apex
-mdl.sqlOffset(offsetValue);
+sb.sqlOffset(offsetValue);
 ```
 
 ```apex
-mdl.sqlOffset(100);
+sb.sqlOffset(100);
 
 // The following OFFSET clause will be reserved for its generation when the method is called like above.
 // OFFSET 100
@@ -241,13 +241,13 @@ mdl.sqlOffset(100);
 
 ## ORDER BY Construction Method
 ```apex
-mdl.sqlOrderBy(fieldName, sortCondition);
+sb.sqlOrderBy(fieldName, sortCondition);
 ```
 
 Example for use
 ```apex
-mdl.sqlOrderBy('Name', 'DESC');
-mdl.sqlOrderBy('Id', 'ASC');
+sb.sqlOrderBy('Name', 'DESC');
+sb.sqlOrderBy('Id', 'ASC');
 
 // The following OEDER BY clause will be reserved for its generation when the method is called like above.
 // ORDER BY Name DESC, Id ASC
@@ -255,13 +255,13 @@ mdl.sqlOrderBy('Id', 'ASC');
 
 ## GROUP BY Construction Method
 ```apex
-mdl.sqlGroupBy(fieldName);
+sb.sqlGroupBy(fieldName);
 ```
 
 Example for use - 1
 ```apex
-mdl.sqlGroupBy('Name');
-mdl.sqlGroupBy('IsActive');
+sb.sqlGroupBy('Name');
+sb.sqlGroupBy('IsActive');
 
 // The following GROUP BY clause will be reserved for its generation when the method is called like above.
 // GROUP BY Name, IsActive;
@@ -269,9 +269,9 @@ mdl.sqlGroupBy('IsActive');
 
 Example for use - 2
 ```apex
-mdl.sqlSelect('COUNT(Id), IsActive');
-mdl.sqlGroupBy('IsActive');
-List<AggregateResult> userGroup = mdl.sqlGet('User');
+sb.sqlSelect('COUNT(Id), IsActive');
+sb.sqlGroupBy('IsActive');
+List<AggregateResult> userGroup = sb.sqlGet('User');
 
 // The method call like above is exactly the same thing as following.
 // List<AggregateResult> userGroup = [SELECT COUNT(Id), IsActive FROM User GROUP BY IsActive];
@@ -279,19 +279,19 @@ List<AggregateResult> userGroup = mdl.sqlGet('User');
 
 ## HAVING Construction Method
 ```apex
-mdl.sqlHaving(fieldName, fieldValue);
+sb.sqlHaving(fieldName, fieldValue);
 ```
 
 Example for use - 1
 ```apex
-mdl.sqlHaving('COUNT(Id)', 3);
+sb.sqlHaving('COUNT(Id)', 3);
 
 // The following HAVING clause will be reserved for its generation when the method is called like above.
 // HAVING COUNT(Id) = 3
 ```
 
 ```apex
-mdl.sqlHaving('Name LIKE', '%Misaka%');
+sb.sqlHaving('Name LIKE', '%Misaka%');
 
 // Comparative operators can be contained into keys of the 1st argument, which needs to add space between them.
 // HAVING Name LIKE '%Misaka%'
@@ -299,8 +299,8 @@ mdl.sqlHaving('Name LIKE', '%Misaka%');
 
 Example for use - 2
 ```apex
-mdl.sqlHaving('COUNT(Id) >', 3);
-mdl.sqlHaving('Name LIKE', '%Misaka%');
+sb.sqlHaving('COUNT(Id) >', 3);
+sb.sqlHaving('Name LIKE', '%Misaka%');
 
 // Conditions will be concatinated by "AND" when the method is called more than once.
 // HAVING COUNT(Id) > 3 AND Name = '%Misaka%'
@@ -308,11 +308,11 @@ mdl.sqlHaving('Name LIKE', '%Misaka%');
 
 Example for use - 3
 ```apex
-mdl.sqlSelect('COUNT(Id), Name, IsActive');
-mdl.sqlGroupBy('IsActive');
-mdl.sqlHaving('COUNT(Id) >', 3);
-mdl.sqlHaving('Name LIKE', '%Misaka%');
-List<AggregateResult> userGroup = mdl.sqlGet('User');
+sb.sqlSelect('COUNT(Id), Name, IsActive');
+sb.sqlGroupBy('IsActive');
+sb.sqlHaving('COUNT(Id) >', 3);
+sb.sqlHaving('Name LIKE', '%Misaka%');
+List<AggregateResult> userGroup = sb.sqlGet('User');
 
 // The method call like above is exactly the same thing as following.
 // List<AggregateResult> userGroup = [SELECT COUNT(Id), Name, IsActive FROM User GROUP BY IsActive HAVING COUNT(Id) > 3 AND Name = '%Misaka%'];
@@ -320,15 +320,15 @@ List<AggregateResult> userGroup = mdl.sqlGet('User');
 
 ## ALL ROWS Construction Method
 ```apex
-mdl.sqlAllRows();
+sb.sqlAllRows();
 ```
 
 Example for use
 ```apex
-mdl.sqlAllRows();
-mdl.sqlSelect('Id, Name, IsDeleted');
-mdl.sqlWhere('IsDeleted', true);
-List<User> userList = mdl.sqlGet('User');
+sb.sqlAllRows();
+sb.sqlSelect('Id, Name, IsDeleted');
+sb.sqlWhere('IsDeleted', true);
+List<User> userList = sb.sqlGet('User');
 
 // The method call like above is exactly the same thing as following.
 // List<User> userList = [SELECT Id, Name, IsDeleted FROM User WHERE IsDeleted = true ALL ROWS];
@@ -336,31 +336,31 @@ List<User> userList = mdl.sqlGet('User');
 
 ## SQL Construction Cache Method
 ```apex
-mdl.sqlStartCache();
+sb.sqlStartCache();
 ```
 Feature of SQL Construction Method can be switched to keep query from initializing even after it is called by sqlGet or sqlQuery method.  
 Please call clear method to reset this feature and initialze query.
 
 Example for use
 ```apex
-mdl.sqlStartCache(); // Start keeping query cache
+sb.sqlStartCache(); // Start keeping query cache
 
-mdl.sqlSelect('Id, Name');
-List<User> userList = mdl.sqlGet('User'); // List<User> userList = [SELECT Id, Name FROM User];
+sb.sqlSelect('Id, Name');
+List<User> userList = sb.sqlGet('User'); // List<User> userList = [SELECT Id, Name FROM User];
 
-mdl.sqlSelect('IsActive');
-mdl.sqlWhere('IsActive', true);
-List<User> userList = mdl.sqlGet('User'); // List<User> userList = [SELECT Id, Name, IsActive FROM User WHERE IsActive = true];
+sb.sqlSelect('IsActive');
+sb.sqlWhere('IsActive', true);
+List<User> userList = sb.sqlGet('User'); // List<User> userList = [SELECT Id, Name, IsActive FROM User WHERE IsActive = true];
 
-mdl.clear(); // Reset and initialize here
+sb.clear(); // Reset and initialize here
 
-mdl.sqlSelect('IsDeleted');
-List<User> userList = mdl.sqlGet('User'); // List<User> userList = [SELECT IsDeleted FROM User];
+sb.sqlSelect('IsDeleted');
+List<User> userList = sb.sqlGet('User'); // List<User> userList = [SELECT IsDeleted FROM User];
 ```
 
 ## SQL Construction Initialize Method
 ```apex
-mdl.clear();
+sb.clear();
 ```
 Reset query and initialize all features of SQL Construction methods.  
 This method is also called in the constructor.  
@@ -368,15 +368,15 @@ Generally, please use this method with sqlStartCache method.
 
 Example for use
 ```apex
-mdl.sqlStartCache(); // Start keeping query cache
+sb.sqlStartCache(); // Start keeping query cache
 
-mdl.sqlSelect('Id, Name');
-List<User> userList = mdl.sqlGet('User'); // List<User> userList = [SELECT Id, Name FROM User];
+sb.sqlSelect('Id, Name');
+List<User> userList = sb.sqlGet('User'); // List<User> userList = [SELECT Id, Name FROM User];
 
-mdl.clear(); // Reset and initialize here
+sb.clear(); // Reset and initialize here
 
-mdl.sqlSelect('IsDeleted');
-List<Account> accList = mdl.sqlGet('Account'); // List<Account> accList = [SELECT IsDeleted FROM Account];
+sb.sqlSelect('IsDeleted');
+List<Account> accList = sb.sqlGet('Account'); // List<Account> accList = [SELECT IsDeleted FROM Account];
 ```
 
 ## ★Execute Query By SQL Construction Method
@@ -384,12 +384,12 @@ The SQL Construction Method is only to reserve for generation of query, and the 
 This sqlGet method just executes the query by the SQL Construction Method and returns the list of sObject records.
 
 ```apex
-mdl.sqlGet(sObjectName);
+sb.sqlGet(sObjectName);
 ```
 
 Example for use
 ```apex
-List<Account> accList = mdl.sqlGet('Account');
+List<Account> accList = sb.sqlGet('Account');
 
 // The method call like above is exactly the same thing as following.
 // The "*" is only a literal expression for the example, and actual query selects all fields of a sObjects.
@@ -401,14 +401,14 @@ As is the same with the sqlGet method, this sqlQuery method just generates query
 NOTE: This method does not execute query!
 
 ```apex
-mdl.sqlQuery(sObjectName);
+sb.sqlQuery(sObjectName);
 ```
 
 Example for use
 ```apex
-mdl.sqlSelect('Id, Name');
-mdl.sqlWhere('NumberOfEmployees >', 100);
-String query = mdl.sqlQuery('Account');
+sb.sqlSelect('Id, Name');
+sb.sqlWhere('NumberOfEmployees >', 100);
+String query = sb.sqlQuery('Account');
 
 // The method call like above is exactly the same thing as following.
 // String query = 'SELECT Id, Name FROM Account WHERE NumberOfEmployees > 100';
@@ -419,7 +419,7 @@ Those following methods is used for DML operations of sObject record.
 
 ## Insert Handling Method
 ```apex
-mdl.sqlInsert(sObjectCollection, params);
+sb.sqlInsert(sObjectCollection, params);
 ```
 
 |Arg.|Name|Type|Note|
@@ -440,7 +440,7 @@ params.put('BillingCountry', 'Japan');
 params.put('BillingState', 'Tokyo');
 params.put('NumberOfEmployees', 10091);
 
-result = mdl.sqlInsert(acc, params);
+result = sb.sqlInsert(acc, params);
 
 // Value of the "result" variable when successful
 {
@@ -451,7 +451,7 @@ result = mdl.sqlInsert(acc, params);
 
 Example for use - 2
 ```apex
-result = mdl.sqlInsert(acc, params);
+result = sb.sqlInsert(acc, params);
 
 if ((Boolean)result.get('success')) {
     // Some process
@@ -467,7 +467,7 @@ if ((Boolean)result.get('success')) {
 Handling bulk insert is possible also by sqlInsert method above, but this sqlInsertAll method can complete the DML operation for the rest of sObject records even if some fail. The feature of this method utilizes "Database.insert()" method with the 2nd argument assigned false.
 
 ```apex
-mdl.sqlInsertAll(sObjectCollection, params);
+sb.sqlInsertAll(sObjectCollection, params);
 ```
 
 |Arg.|Name|Type|Note|
@@ -491,12 +491,12 @@ params.put('BillingCountry', 'Japan');
 params.put('BillingState', 'Tokyo');
 params.put('NumberOfEmployees', 10091);
 
-srList = mdl.sqlInsertAll(accList, params);
+srList = sb.sqlInsertAll(accList, params);
 ```
 
 Example for use - 2
 ```apex
-srList = mdl.sqlInsertAll(acc, params);
+srList = sb.sqlInsertAll(acc, params);
 
 for (Database.SaveResult sr : srList) {
     if (sr.isSuccess()) {
@@ -514,7 +514,7 @@ for (Database.SaveResult sr : srList) {
 
 ## Update Handling Method
 ```apex
-mdl.sqlUpdate(sObjectCollection, params);
+sb.sqlUpdate(sObjectCollection, params);
 ```
 
 |Arg.|Name|Type|Note|
@@ -527,8 +527,8 @@ Example for use - 1
 Map<String, Object> params = new Map<String, Object>{};
 Map<String, Object> result = new Map<String, Object>{};
 
-mdl.sqlSelect('Id');
-List<Account> accList = mdl.sqlGet('Account');
+sb.sqlSelect('Id');
+List<Account> accList = sb.sqlGet('Account');
 
 params.put('Name', 'Sisters');
 params.put('BillingCity', 'Academic city');
@@ -536,7 +536,7 @@ params.put('BillingCountry', 'Japan');
 params.put('BillingState', 'Tokyo');
 params.put('NumberOfEmployees', 20001);
 
-result = mdl.sqlUpdate(accList, params);
+result = sb.sqlUpdate(accList, params);
 
 // Value of the "result" variable when successful
 {
@@ -547,7 +547,7 @@ result = mdl.sqlUpdate(accList, params);
 
 Example for use - 2
 ```apex
-result = mdl.sqlUpdate(acc, params);
+result = sb.sqlUpdate(acc, params);
 
 if ((Boolean)result.get('success')) {
     // Some process
@@ -563,7 +563,7 @@ if ((Boolean)result.get('success')) {
 Handling bulk update is possible also by sqlUpdate method above, but this sqlUpdateAll method can complete the DML operation for the rest of sObject records even if some fail. The feature of this method utilizes "Database.update()" method with the 2nd argument assigned false.
 
 ```apex
-mdl.sqlUpdateAll(sObjectCollection, params);
+sb.sqlUpdateAll(sObjectCollection, params);
 ```
 
 |Arg.|Name|Type|Note|
@@ -576,8 +576,8 @@ Example for use - 1
 Map<String, Object> params = new Map<String, Object>{};
 List<Database.SaveResult> srList = new List<Database.SaveResult>();
 
-mdl.sqlSelect('Id');
-List<Account> accList = mdl.sqlGet('Account');
+sb.sqlSelect('Id');
+List<Account> accList = sb.sqlGet('Account');
 
 params.put('Name', 'Misaka10091');
 params.put('BillingCity', 'Academic city');
@@ -585,12 +585,12 @@ params.put('BillingCountry', 'Japan');
 params.put('BillingState', 'Tokyo');
 params.put('NumberOfEmployees', 10091);
 
-srList = mdl.sqlUpdateAll(accList, params);
+srList = sb.sqlUpdateAll(accList, params);
 ```
 
 Example for use - 2
 ```apex
-srList = mdl.sqlUpdateAll(acc, params);
+srList = sb.sqlUpdateAll(acc, params);
 
 for (Database.SaveResult sr : srList) {
     if (sr.isSuccess()) {
@@ -608,7 +608,7 @@ for (Database.SaveResult sr : srList) {
 
 ## Upsert Handling Method
 ```apex
-mdl.sqlUpsert(sObjectCollection, params);
+sb.sqlUpsert(sObjectCollection, params);
 ```
 
 |Arg.|Name|Type|Note|
@@ -621,8 +621,8 @@ Example for use - 1
 Map<String, Object> params = new Map<String, Object>{};
 Map<String, Object> result = new Map<String, Object>{};
 
-mdl.sqlSelect('Id');
-List<Account> accList = mdl.sqlGet('Account');
+sb.sqlSelect('Id');
+List<Account> accList = sb.sqlGet('Account');
 
 params.put('Name', 'Sisters');
 params.put('BillingCity', 'Academic city');
@@ -633,7 +633,7 @@ params.put('NumberOfEmployees', 20001);
 Account newAcc = new Account(Name = 'Last Order', BillingCity = 'Academic city');
 accList.add(newAcc);
 
-result = mdl.sqlUpsert(accList, params);
+result = sb.sqlUpsert(accList, params);
 
 // Value of the "result" variable when successful
 {
@@ -644,7 +644,7 @@ result = mdl.sqlUpsert(accList, params);
 
 Example for use - 2
 ```apex
-result = mdl.sqlUpsert(acc, params);
+result = sb.sqlUpsert(acc, params);
 
 if ((Boolean)result.get('success')) {
     // Some process
@@ -658,7 +658,7 @@ if ((Boolean)result.get('success')) {
 
 ## Delete Handling Method
 ```apex
-mdl.sqlDelete(sObjectCollection);
+sb.sqlDelete(sObjectCollection);
 ```
 
 |Arg.|Name|Type|Note|
@@ -669,10 +669,10 @@ Example for use - 1
 ```apexapex
 Map<String, Object> result = new Map<String, Object>{};
 
-mdl.sqlSelect('Id');
-List<Account> accList = mdl.sqlGet('Account');
+sb.sqlSelect('Id');
+List<Account> accList = sb.sqlGet('Account');
 
-result = mdl.sqlDelete(accList);
+result = sb.sqlDelete(accList);
 
 // Value of the "result" variable when successful
 {
@@ -683,7 +683,7 @@ result = mdl.sqlDelete(accList);
 
 Example for use - 2
 ```apex
-result = mdl.sqlDelete(acc);
+result = sb.sqlDelete(acc);
 
 if ((Boolean)result.get('success')) {
     // Some process
@@ -698,17 +698,17 @@ if ((Boolean)result.get('success')) {
 # Sample of usage
 ## Sample 1
 ```apex
-mdl.sqlSelect('Id');
-mdl.sqlSelect('Name');
-mdl.sqlSelect('Alias');
-List<User> user = mdl.sqlGet('User');
+sb.sqlSelect('Id');
+sb.sqlSelect('Name');
+sb.sqlSelect('Alias');
+List<User> user = sb.sqlGet('User');
 ```
 
 Or in another way,
 
 ```apex
-mdl.sqlSelect('Id, Name, Alias');
-List<User> user = mdl.sqlGet('User');
+sb.sqlSelect('Id, Name, Alias');
+List<User> user = sb.sqlGet('User');
 ```
 
 The method call like above is exactly the same thing as following.
@@ -726,16 +726,16 @@ List<User> user = [
 
 ## Sample 2
 ```apex
-mdl.sqlSelect('*');
-mdl.sqlWhere('Id', '00s4h00000216cCDXW');
-List<Account> accList = mdl.sqlGet('Account');
+sb.sqlSelect('*');
+sb.sqlWhere('Id', '00s4h00000216cCDXW');
+List<Account> accList = sb.sqlGet('Account');
 ```
 
 Or in another way,
 
 ```apex
-mdl.sqlWhere('Id', '00s4h00000216cCDXW');
-List<Account> accList = mdl.sqlGet('Account');
+sb.sqlWhere('Id', '00s4h00000216cCDXW');
+List<Account> accList = sb.sqlGet('Account');
 ```
 
 The method call like above is exactly the same thing as following.
@@ -799,13 +799,13 @@ List<Account> accList = [
 
 ## Sample 3
 ```apex
-mdl.sqlSelect('Id, Name');
+sb.sqlSelect('Id, Name');
 
 for (Integer i = 0; i < 100; i++) {
-    mdl.sqlOrWhere('Name', 'Misaka' + i);
+    sb.sqlOrWhere('Name', 'Misaka' + i);
 }
 
-List<Account> accList = mdl.sqlGet('Account');
+List<Account> accList = sb.sqlGet('Account');
 ```
 
 The method call like above is exactly the same thing as following.
@@ -824,7 +824,7 @@ List<Account> accList = [
 
 ## Sample 4
 ```apex
-SOQLBuilder mdl = new SOQLBuilder();
+SOQLBuilder sb = new SOQLBuilder();
 
 RestRequest req = RestContext.request; // Rest API Context
 
@@ -838,12 +838,12 @@ Map<String, Object> params = (Map<String, Object>)JSON.deserializeUntyped(req.re
 String accName = (String)params.get('Name');
 
 // Get sObject record of the Name
-mdl.sqlSelect('Id');
-mdl.sqlWhere('Name', accName);
-List<Account> accList = mdl.sqlGet('Account');
+sb.sqlSelect('Id');
+sb.sqlWhere('Name', accName);
+List<Account> accList = sb.sqlGet('Account');
 
 // DML Operation
-Map<String, Object> result = mdl.sqlUpdate(accList, params); // Just simply assign "params" variable
+Map<String, Object> result = sb.sqlUpdate(accList, params); // Just simply assign "params" variable
 
 // Verify result
 if (! (Boolean)result.get('success') ) { // When failed
@@ -878,16 +878,16 @@ The SQL Construction Method basically initializes itself after sqlGet / sqlQuery
 
 ## 2. Query will be initialized after sqlGet / sqlQuery method is called
 ```apex
-SOQLBuilder mdl = new SOQLBuilder(); // mdl to generate instance, only once here
+SOQLBuilder sb = new SOQLBuilder(); // sb to generate instance, only once here
 
-mdl.sqlSelect('Id, Name');
-List<User> user = mdl.sqlGet('User'); // Query is also initialized here
+sb.sqlSelect('Id, Name');
+List<User> user = sb.sqlGet('User'); // Query is also initialized here
 
-mdl.sqlSelect('Id, Name');
-mdl.sqlWhere('Id', '00s4h00000216cCDXW');
-List<Account> acc = mdl.sqlGet('Account'); // Query is also initialized here
+sb.sqlSelect('Id, Name');
+sb.sqlWhere('Id', '00s4h00000216cCDXW');
+List<Account> acc = sb.sqlGet('Account'); // Query is also initialized here
 
-mdl.sqlSelect('Id, Name');
-mdl.sqlLimit(20);
-List<Contact> con = mdl.sqlGet('Contact'); // Query is also initialized here
+sb.sqlSelect('Id, Name');
+sb.sqlLimit(20);
+List<Contact> con = sb.sqlGet('Contact'); // Query is also initialized here
 ```
