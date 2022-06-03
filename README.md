@@ -1,7 +1,8 @@
 Apex SOQLBuilder
 ===
 
-Salesforce Apex Class for DML operations with extensity
+Salesforce Apex Class for dynamic query builder and DML operations.
+You can construct query more intuitively because those methods arranged here are able to be used with conditional branching, loop handling and others.
 
 # Introduction
 Development of Apex class needs to describe Salesforce's unique language called [SOQL](https://developer.salesforce.com/docs/atlas.ja-jp.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_sosl_intro.htm) to handle DML operations for sObjects. More conditions to filter sObject records to get, query becomes longer and more redundant, which makes it difficult to describe dynamic query.  
