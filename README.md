@@ -386,13 +386,13 @@ Integer offsetVal = (Integer)req.params.get('offset');
 // 全ての条件パターンで SOQL クエリを記述しなければならない
 List<Account> accList = new List<Account>();
 if (limitVal != null && offsetVal != null) {
-    List<Account> accList = [SELECT Id, Name, Phone FROM Account LIMIT :limitVal OFFSET :offsetVal];
+    accList = [SELECT Id, Name, Phone FROM Account LIMIT :limitVal OFFSET :offsetVal];
 } else if (limitVal != null && offsetVal == null) {
-    List<Account> accList = [SELECT Id, Name, Phone FROM Account LIMIT :limitVal];
+    accList = [SELECT Id, Name, Phone FROM Account LIMIT :limitVal];
 } else if (limitVal == null && offsetVal != null) {
-    List<Account> accList = [SELECT Id, Name, Phone FROM Account OFFSET :offsetVal];
+    accList = [SELECT Id, Name, Phone FROM Account OFFSET :offsetVal];
 } else {
-    List<Account> accList = [SELECT Id, Name, Phone FROM Account];
+    accList = [SELECT Id, Name, Phone FROM Account];
 }
 ```
 
