@@ -15,7 +15,7 @@ public class SOQLBuilderTest {
         // Create dummy records for Account
         List<Account> accList = new List<Account>();
         for(Integer i = 0; i < 3; i++) {
-            accList.add(new Account(Name = 'Misaka' + i, BillingCity = 'Academic city', BillingCountry = 'Japan', BillingState = 'Tokyo', NumberOfEmployees = i*100));
+            accList.add(new Account(Name = 'John' + i, BillingCity = 'Academic city', BillingCountry = 'Japan', BillingState = 'Tokyo', NumberOfEmployees = i*100));
         }
         insert accList;
     }
@@ -24,14 +24,14 @@ public class SOQLBuilderTest {
     static void testSqlGet() {
         SOQLBuilder sb = new SOQLBuilder();
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlWhere('Id !=', '00s4h00000216cAAAA');
-        sb.sqlOrWhere('Id !=', '00s4h00000216cBBBB');
-        sb.sqlLimit(2);
-        sb.sqlOffset(1);
-        sb.sqlOrderBy('Name', 'DESC');
-        sb.sqlOrderBy('NumberOfEmployees', 'ASC');
-        List<Account> accList = sb.sqlGet('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlWhere('Id !=', '00s4h00000216cAAAA');
+        sb.soqlOrWhere('Id !=', '00s4h00000216cBBBB');
+        sb.soqlLimit(2);
+        sb.soqlOffset(1);
+        sb.soqlOrderBy('Name', 'DESC');
+        sb.soqlOrderBy('NumberOfEmployees', 'ASC');
+        List<Account> accList = sb.soqlGet('Account');
 
         List<Account> targetAccList = [
             SELECT
@@ -50,11 +50,11 @@ public class SOQLBuilderTest {
 
         System.assertEquals(targetAccList, accList);
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlLike('Name', '%Mi%');
-        sb.sqlOrLike('Name', '%saka%');
-        sb.sqlLimit(3);
-        List<Account> accList2 = sb.sqlGet('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlLike('Name', '%Jo%');
+        sb.soqlOrLike('Name', '%hn%');
+        sb.soqlLimit(3);
+        List<Account> accList2 = sb.soqlGet('Account');
 
         List<Account> targetAccList2 = [
             SELECT
@@ -63,23 +63,23 @@ public class SOQLBuilderTest {
             FROM
                 Account
             WHERE
-                Name LIKE '%Mi%'
+                Name LIKE '%Jo%'
             OR
-                Name LIKE '%saka%'
+                Name LIKE '%hn%'
             LIMIT 3
         ];
 
         System.assertEquals(targetAccList2, accList2);
 
-        sb.sqlAllRows();
-        sb.sqlSelect('COUNT(Id), Name, IsDeleted');
-        sb.sqlGroupBy('Name');
-        sb.sqlGroupBy('isDeleted');
-        sb.sqlHaving('COUNT(Id) >', 0);
-        sb.sqlHaving('Name LIKE', '%Mi%');
-        sb.sqlHaving('Name', 'Misaka1');
-        sb.sqlHaving('isDeleted', false);
-        List<AggregateResult> accList3 = sb.sqlGet('Account');
+        sb.soqlAllRows();
+        sb.soqlSelect('COUNT(Id), Name, IsDeleted');
+        sb.soqlGroupBy('Name');
+        sb.soqlGroupBy('isDeleted');
+        sb.soqlHaving('COUNT(Id) >', 0);
+        sb.soqlHaving('Name LIKE', '%Jo%');
+        sb.soqlHaving('Name', 'John1');
+        sb.soqlHaving('isDeleted', false);
+        List<AggregateResult> accList3 = sb.soqlGet('Account');
 
         List<AggregateResult> targetAccList3 = [
             SELECT
@@ -89,16 +89,16 @@ public class SOQLBuilderTest {
             FROM
                 Account
             GROUP BY Name, IsDeleted
-            HAVING COUNT(Id) > 0 AND Name LIKE '%Mi%' AND Name = 'Misaka1' AND isDeleted = false
+            HAVING COUNT(Id) > 0 AND Name LIKE '%Jo%' AND Name = 'John1' AND isDeleted = false
             ALL ROWS
         ];
 
         System.assertEquals(targetAccList3, accList3);
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlWhere('BillingState', 'Tokyo');
-        sb.sqlOrWhere('BillingCountry', 'Japan');
-        List<Account> accList4 = sb.sqlGet('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlWhere('BillingState', 'Tokyo');
+        sb.soqlOrWhere('BillingCountry', 'Japan');
+        List<Account> accList4 = sb.soqlGet('Account');
 
         List<Account> targetAccList4 = [
             SELECT
@@ -114,11 +114,11 @@ public class SOQLBuilderTest {
 
         System.assertEquals(targetAccList4, accList4);
 
-        sb.sqlSelect('Id, Name, NumberOfEmployees');
-        sb.sqlWhereIn('Name', '\'Misaka1\', \'Misaka2\', \'Misaka3\'');
-        sb.sqlWhereNotIn('NumberOfEmployees', '100, 400, 600');
-        sb.sqlLimit(3);
-        List<Account> accList5 = sb.sqlGet('Account');
+        sb.soqlSelect('Id, Name, NumberOfEmployees');
+        sb.soqlWhereIn('Name', '\'John1\', \'John2\', \'John3\'');
+        sb.soqlWhereNotIn('NumberOfEmployees', '100, 400, 600');
+        sb.soqlLimit(3);
+        List<Account> accList5 = sb.soqlGet('Account');
         
         List<Account> targetAccList5 = [
             SELECT
@@ -128,7 +128,7 @@ public class SOQLBuilderTest {
             FROM
                 Account
             WHERE
-                Name IN ('Misaka1', 'Misaka2', 'Misaka3')
+                Name IN ('John1', 'John2', 'John3')
             AND
                 NumberOfEmployees NOT IN (100, 400, 600)
             LIMIT 3
@@ -136,13 +136,13 @@ public class SOQLBuilderTest {
 
         System.assertEquals(targetAccList5, accList5);
 
-        Set<String> whereInParam = new Set<String>{'Misaka1', 'Misaka2', 'Misaka3'};
+        Set<String> whereInParam = new Set<String>{'John1', 'John2', 'John3'};
         Set<Integer> whereNotInParam = new Set<Integer>{100, 400, 600};
-        sb.sqlSelect('Id, Name, NumberOfEmployees');
-        sb.sqlWhereIn('Name', whereInParam);
-        sb.sqlWhereNotIn('NumberOfEmployees', whereNotInParam);
-        sb.sqlLimit(3);
-        List<Account> accList6 = sb.sqlGet('Account');
+        sb.soqlSelect('Id, Name, NumberOfEmployees');
+        sb.soqlWhereIn('Name', whereInParam);
+        sb.soqlWhereNotIn('NumberOfEmployees', whereNotInParam);
+        sb.soqlLimit(3);
+        List<Account> accList6 = sb.soqlGet('Account');
         
         List<Account> targetAccList6 = [
             SELECT
@@ -152,7 +152,7 @@ public class SOQLBuilderTest {
             FROM
                 Account
             WHERE
-                Name IN ('Misaka1', 'Misaka2', 'Misaka3')
+                Name IN ('John1', 'John2', 'John3')
             AND
                 NumberOfEmployees NOT IN (100, 400, 600)
             LIMIT 3
@@ -165,109 +165,109 @@ public class SOQLBuilderTest {
     static void testCreateQueryStr() {
         SOQLBuilder sb = new SOQLBuilder();
 
-        sb.sqlSelect('*');
-        sb.sqlNotLike('Name', '%Mi%');
-        sb.sqlOrNotLike('Name', '%koto%');
-        String query = sb.sqlQuery('UserPackageLicense');
+        sb.soqlSelect('*');
+        sb.soqlNotLike('Name', '%Jo%');
+        sb.soqlOrNotLike('Name', '%hn%');
+        String query = sb.soqlQuery('UserPackageLicense');
 
-        String targetQuery = 'SELECT Id, PackageLicenseId, UserId, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp FROM UserPackageLicense WHERE (NOT Name LIKE \'%Mi%\') OR (NOT Name LIKE \'%koto%\')';
+        String targetQuery = 'SELECT Id, PackageLicenseId, UserId, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp FROM UserPackageLicense WHERE (NOT Name LIKE \'%Jo%\') OR (NOT Name LIKE \'%hn%\')';
         
         System.assertEquals(targetQuery, query);
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlWhere('Name', 'Misaka7');
-        sb.sqlWhere('NumberOfEmployees', 700);
-        sb.sqlWhere('NumberOfEmployees <', 1000);
-        sb.sqlWhere('NumberOfEmployees >', 0);
-        String query2 = sb.sqlQuery('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlWhere('Name', 'John7');
+        sb.soqlWhere('NumberOfEmployees', 700);
+        sb.soqlWhere('NumberOfEmployees <', 1000);
+        sb.soqlWhere('NumberOfEmployees >', 0);
+        String query2 = sb.soqlQuery('Account');
 
-        String targetQuery2 = 'SELECT Id, Name FROM Account WHERE Name = \'Misaka7\' AND NumberOfEmployees = 700 AND NumberOfEmployees < 1000 AND NumberOfEmployees > 0';
+        String targetQuery2 = 'SELECT Id, Name FROM Account WHERE Name = \'John7\' AND NumberOfEmployees = 700 AND NumberOfEmployees < 1000 AND NumberOfEmployees > 0';
 
         System.assertEquals(targetQuery2, query2);
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlOrWhere('Name', 'Misaka7');
-        sb.sqlOrWhere('NumberOfEmployees', 700);
-        sb.sqlOrWhere('NumberOfEmployees <', 1000);
-        sb.sqlOrWhere('NumberOfEmployees >', 0);
-        String query3 = sb.sqlQuery('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlOrWhere('Name', 'John7');
+        sb.soqlOrWhere('NumberOfEmployees', 700);
+        sb.soqlOrWhere('NumberOfEmployees <', 1000);
+        sb.soqlOrWhere('NumberOfEmployees >', 0);
+        String query3 = sb.soqlQuery('Account');
 
-        String targetQuery3 = 'SELECT Id, Name FROM Account WHERE Name = \'Misaka7\' OR NumberOfEmployees = 700 OR NumberOfEmployees < 1000 OR NumberOfEmployees > 0';
+        String targetQuery3 = 'SELECT Id, Name FROM Account WHERE Name = \'John7\' OR NumberOfEmployees = 700 OR NumberOfEmployees < 1000 OR NumberOfEmployees > 0';
 
         System.assertEquals(targetQuery3, query3);
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlWhere('Name', 'Misaka7');
-        sb.sqlLike('Name', '%Mi%');
-        sb.sqlLike('NumberOfEmployees', 700);
-        String query4 = sb.sqlQuery('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlWhere('Name', 'John7');
+        sb.soqlLike('Name', '%Jo%');
+        sb.soqlLike('NumberOfEmployees', 700);
+        String query4 = sb.soqlQuery('Account');
 
-        String targetQuery4 = 'SELECT Id, Name FROM Account WHERE Name = \'Misaka7\' AND Name LIKE \'%Mi%\' AND NumberOfEmployees LIKE 700';
+        String targetQuery4 = 'SELECT Id, Name FROM Account WHERE Name = \'John7\' AND Name LIKE \'%Jo%\' AND NumberOfEmployees LIKE 700';
 
         System.assertEquals(targetQuery4, query4);
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlOrLike('Name', '%Mi%');
-        sb.sqlOrLike('NumberOfEmployees', 700);
-        String query5 = sb.sqlQuery('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlOrLike('Name', '%Jo%');
+        sb.soqlOrLike('NumberOfEmployees', 700);
+        String query5 = sb.soqlQuery('Account');
 
-        String targetQuery5 = 'SELECT Id, Name FROM Account WHERE Name LIKE \'%Mi%\' OR NumberOfEmployees LIKE 700';
+        String targetQuery5 = 'SELECT Id, Name FROM Account WHERE Name LIKE \'%Jo%\' OR NumberOfEmployees LIKE 700';
 
         System.assertEquals(targetQuery5, query5);
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlWhere('Name', 'Misaka7');
-        sb.sqlNotLike('Name', '%Mi%');
-        sb.sqlNotLike('NumberOfEmployees', 700);
-        String query6 = sb.sqlQuery('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlWhere('Name', 'John7');
+        sb.soqlNotLike('Name', '%Jo%');
+        sb.soqlNotLike('NumberOfEmployees', 700);
+        String query6 = sb.soqlQuery('Account');
 
-        String targetQuery6 = 'SELECT Id, Name FROM Account WHERE Name = \'Misaka7\' AND (NOT Name LIKE \'%Mi%\') AND (NOT NumberOfEmployees LIKE 700)';
+        String targetQuery6 = 'SELECT Id, Name FROM Account WHERE Name = \'John7\' AND (NOT Name LIKE \'%Jo%\') AND (NOT NumberOfEmployees LIKE 700)';
 
         System.assertEquals(targetQuery6, query6);
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlNotLike('Name', '%Mi%');
-        sb.sqlNotLike('NumberOfEmployees', 700);
-        String query7 = sb.sqlQuery('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlNotLike('Name', '%Jo%');
+        sb.soqlNotLike('NumberOfEmployees', 700);
+        String query7 = sb.soqlQuery('Account');
 
-        String targetQuery7 = 'SELECT Id, Name FROM Account WHERE (NOT Name LIKE \'%Mi%\') AND (NOT NumberOfEmployees LIKE 700)';
+        String targetQuery7 = 'SELECT Id, Name FROM Account WHERE (NOT Name LIKE \'%Jo%\') AND (NOT NumberOfEmployees LIKE 700)';
 
         System.assertEquals(targetQuery7, query7);
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlOrNotLike('Name', '%Mi%');
-        sb.sqlOrNotLike('NumberOfEmployees', 700);
-        String query8 = sb.sqlQuery('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlOrNotLike('Name', '%Jo%');
+        sb.soqlOrNotLike('NumberOfEmployees', 700);
+        String query8 = sb.soqlQuery('Account');
 
-        String targetQuery8 = 'SELECT Id, Name FROM Account WHERE (NOT Name LIKE \'%Mi%\') OR (NOT NumberOfEmployees LIKE 700)';
+        String targetQuery8 = 'SELECT Id, Name FROM Account WHERE (NOT Name LIKE \'%Jo%\') OR (NOT NumberOfEmployees LIKE 700)';
 
         System.assertEquals(targetQuery8, query8);
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlWhere('Name', 'Misaka1');
-        sb.sqlWhereIn('Name', new Set<String>{'Misaka1', 'Misaka2', 'Misaka3'});
-        sb.sqlWhereIn('NumberOfEmployees', new Set<Integer>{100, 200, 300});
-        String query9 = sb.sqlQuery('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlWhere('Name', 'John1');
+        sb.soqlWhereIn('Name', new Set<String>{'John1', 'John2', 'John3'});
+        sb.soqlWhereIn('NumberOfEmployees', new Set<Integer>{100, 200, 300});
+        String query9 = sb.soqlQuery('Account');
 
-        String targetQuery9 = 'SELECT Id, Name FROM Account WHERE Name = \'Misaka1\' AND Name IN (\'Misaka1\', \'Misaka2\', \'Misaka3\') AND NumberOfEmployees IN (100, 200, 300)';
+        String targetQuery9 = 'SELECT Id, Name FROM Account WHERE Name = \'John1\' AND Name IN (\'John1\', \'John2\', \'John3\') AND NumberOfEmployees IN (100, 200, 300)';
 
         System.assertEquals(targetQuery9, query9);
 
-        sb.sqlStartCache();
+        sb.soqlStartCache();
 
-        sb.sqlSelect('Id, Name');
-        sb.sqlWhereNotIn('Name', new Set<String>{'Misaka1', 'Misaka2', 'Misaka3'});
-        sb.sqlWhereNotIn('NumberOfEmployees', new Set<Integer>{100, 200, 300});
-        String query10 = sb.sqlQuery('Account');
+        sb.soqlSelect('Id, Name');
+        sb.soqlWhereNotIn('Name', new Set<String>{'John1', 'John2', 'John3'});
+        sb.soqlWhereNotIn('NumberOfEmployees', new Set<Integer>{100, 200, 300});
+        String query10 = sb.soqlQuery('Account');
 
-        String targetQuery10 = 'SELECT Id, Name FROM Account WHERE Name NOT IN (\'Misaka1\', \'Misaka2\', \'Misaka3\') AND NumberOfEmployees NOT IN (100, 200, 300)';
+        String targetQuery10 = 'SELECT Id, Name FROM Account WHERE Name NOT IN (\'John1\', \'John2\', \'John3\') AND NumberOfEmployees NOT IN (100, 200, 300)';
 
         System.assertEquals(targetQuery10, query10);
 
-        sb.sqlSelect('IsActive');
-        String query11 = sb.sqlQuery('Account');
+        sb.soqlSelect('IsActive');
+        String query11 = sb.soqlQuery('Account');
 
-        String targetQuery11 = 'SELECT Id, Name, IsActive FROM Account WHERE Name NOT IN (\'Misaka1\', \'Misaka2\', \'Misaka3\') AND NumberOfEmployees NOT IN (100, 200, 300)';
+        String targetQuery11 = 'SELECT Id, Name, IsActive FROM Account WHERE Name NOT IN (\'John1\', \'John2\', \'John3\') AND NumberOfEmployees NOT IN (100, 200, 300)';
 
         System.assertEquals(targetQuery11, query11);
 
@@ -319,38 +319,38 @@ public class SOQLBuilderTest {
         Map<String, Object> result = new Map<String, Object>{};
 
         Account acc = new Account();
-        params.put('Name', 'Misaka10091');
+        params.put('Name', 'John10091');
         params.put('BillingCity', 'Academic city');
         params.put('BillingCountry', 'Japan');
         params.put('BillingState', 'Tokyo');
         params.put('NumberOfEmployees', 10091);
 
         // Single
-        result = sb.sqlInsert(acc, params);
+        result = sb.soqlInsert(acc, params);
         System.assertEquals(true, (Boolean)result.get('success'));
 
-        sb.sqlSelect('Id');
-        sb.sqlWhere('Name', 'Misaka10091');
-        List<Account> accList = sb.sqlGet('Account');
+        sb.soqlSelect('Id');
+        sb.soqlWhere('Name', 'John10091');
+        List<Account> accList = sb.soqlGet('Account');
         System.assertEquals(1, accList.size());
 
         // Multiple
         List<Account> accList2 = new List<Account>();
         for(Integer i = 10000; i < 10010; i++) {
-            accList2.add(new Account(Name = 'Misaka' + i, BillingCity = 'Academic city', BillingCountry = 'Japan', BillingState = 'Tokyo', NumberOfEmployees = i*100));
+            accList2.add(new Account(Name = 'John' + i, BillingCity = 'Academic city', BillingCountry = 'Japan', BillingState = 'Tokyo', NumberOfEmployees = i*100));
         }
         params.put('Name', 'Sisters');
-        result = sb.sqlInsert(accList2, params);
+        result = sb.soqlInsert(accList2, params);
         System.assertEquals(true, (Boolean)result.get('success'));
 
-        sb.sqlSelect('Id');
-        sb.sqlWhere('Name', 'Sisters');
-        List<Account> accList3 = sb.sqlGet('Account');
+        sb.soqlSelect('Id');
+        sb.soqlWhere('Name', 'Sisters');
+        List<Account> accList3 = sb.soqlGet('Account');
         System.assertEquals(10, accList3.size());
 
         // Error
         Integer level = 5;
-        result = sb.sqlInsert(level, params);
+        result = sb.soqlInsert(level, params);
         System.assertEquals(false, (Boolean)result.get('success'));
     }
 
@@ -361,37 +361,37 @@ public class SOQLBuilderTest {
         Map<String, Object> result = new Map<String, Object>{};
 
         Account acc = new Account();
-        params.put('Name', 'Misaka10091');
+        params.put('Name', 'John10091');
         params.put('BillingCity', 'Academic city');
         params.put('BillingCountry', 'Japan');
         params.put('BillingState', 'Tokyo');
         params.put('NumberOfEmployees', 10091);
 
         // Single
-        Database.SaveResult[] srList = sb.sqlInsertAll(acc, params);
+        Database.SaveResult[] srList = sb.soqlInsertAll(acc, params);
         for (Database.SaveResult sr : srList) {
             System.assertEquals(true, sr.isSuccess());
         }
 
-        sb.sqlSelect('Id');
-        sb.sqlWhere('Name', 'Misaka10091');
-        List<Account> accList = sb.sqlGet('Account');
+        sb.soqlSelect('Id');
+        sb.soqlWhere('Name', 'John10091');
+        List<Account> accList = sb.soqlGet('Account');
         System.assertEquals(1, accList.size());
 
         // Multiple
         List<Account> accList2 = new List<Account>();
         for(Integer i = 10000; i < 10010; i++) {
-            accList2.add(new Account(Name = 'Misaka' + i, BillingCity = 'Academic city', BillingCountry = 'Japan', BillingState = 'Tokyo', NumberOfEmployees = i*100));
+            accList2.add(new Account(Name = 'John' + i, BillingCity = 'Academic city', BillingCountry = 'Japan', BillingState = 'Tokyo', NumberOfEmployees = i*100));
         }
         params.put('Name', 'Sisters');
-        Database.SaveResult[] srList2 = sb.sqlInsertAll(accList2, params);
+        Database.SaveResult[] srList2 = sb.soqlInsertAll(accList2, params);
         for (Database.SaveResult sr : srList2) {
             System.assertEquals(true, sr.isSuccess());
         }
 
-        sb.sqlSelect('Id');
-        sb.sqlWhere('Name', 'Sisters');
-        List<Account> accList3 = sb.sqlGet('Account');
+        sb.soqlSelect('Id');
+        sb.soqlWhere('Name', 'Sisters');
+        List<Account> accList3 = sb.soqlGet('Account');
         System.assertEquals(10, accList3.size());
     }
 
@@ -408,19 +408,19 @@ public class SOQLBuilderTest {
         params.put('NumberOfEmployees', 20001);
 
         // Single
-        sb.sqlSelect('Id');
-        List<Account> accList = sb.sqlGet('Account');
+        sb.soqlSelect('Id');
+        List<Account> accList = sb.soqlGet('Account');
 
-        result = sb.sqlUpdate(accList[0], params);
+        result = sb.soqlUpdate(accList[0], params);
         System.assertEquals(true, (Boolean)result.get('success'));
 
         // Multiple
-        result = sb.sqlUpdate(accList, params);
+        result = sb.soqlUpdate(accList, params);
         System.assertEquals(true, (Boolean)result.get('success'));
 
         // Error
         Integer level = 5;
-        result = sb.sqlUpdate(level, params);
+        result = sb.soqlUpdate(level, params);
         System.assertEquals(false, (Boolean)result.get('success'));
     }
 
@@ -437,16 +437,16 @@ public class SOQLBuilderTest {
         params.put('NumberOfEmployees', 20001);
 
         // Single
-        sb.sqlSelect('Id');
-        List<Account> accList = sb.sqlGet('Account');
+        sb.soqlSelect('Id');
+        List<Account> accList = sb.soqlGet('Account');
 
-        Database.SaveResult[] srList = sb.sqlUpdateAll(accList[0], params);
+        Database.SaveResult[] srList = sb.soqlUpdateAll(accList[0], params);
         for (Database.SaveResult sr : srList) {
             System.assertEquals(true, sr.isSuccess());
         }
 
         // Multiple
-        Database.SaveResult[] srList2 = sb.sqlUpdateAll(accList, params);
+        Database.SaveResult[] srList2 = sb.soqlUpdateAll(accList, params);
         for (Database.SaveResult sr : srList2) {
             System.assertEquals(true, sr.isSuccess());
         }
@@ -465,30 +465,30 @@ public class SOQLBuilderTest {
         params.put('NumberOfEmployees', 20001);
 
         // Single
-        sb.sqlSelect('Id');
-        List<Account> accList = sb.sqlGet('Account');
+        sb.soqlSelect('Id');
+        List<Account> accList = sb.soqlGet('Account');
 
-        result = sb.sqlUpsert(accList[0], params);
+        result = sb.soqlUpsert(accList[0], params);
         System.assertEquals(true, (Boolean)result.get('success'));
 
         // Multiple
-        result = sb.sqlUpsert(accList, params);
+        result = sb.soqlUpsert(accList, params);
         System.assertEquals(true, (Boolean)result.get('success'));
 
         // Add one
         Account newAcc = new Account(Name = 'Last Order', BillingCity = 'Academic city');
-        result = sb.sqlUpsert(newAcc, null);
+        result = sb.soqlUpsert(newAcc, null);
         System.assertEquals(true, (Boolean)result.get('success'));
 
-        sb.sqlSelect('Id');
-        sb.sqlWhere('Name', 'Last Order');
-        List<Account> accList2 = sb.sqlGet('Account');
+        sb.soqlSelect('Id');
+        sb.soqlWhere('Name', 'Last Order');
+        List<Account> accList2 = sb.soqlGet('Account');
         System.assertEquals(1, accList2.size());
 
 
         // Error
         Integer level = 5;
-        result = sb.sqlUpsert(level, params);
+        result = sb.soqlUpsert(level, params);
         System.assertEquals(false, (Boolean)result.get('success'));
     }
 
@@ -498,24 +498,24 @@ public class SOQLBuilderTest {
         Map<String, Object> result = new Map<String, Object>{};
 
         // Single
-        sb.sqlSelect('Id');
-        List<Account> accList = sb.sqlGet('Account');
+        sb.soqlSelect('Id');
+        List<Account> accList = sb.soqlGet('Account');
 
-        result = sb.sqlDelete(accList[0]);
+        result = sb.soqlDelete(accList[0]);
         System.assertEquals(true, (Boolean)result.get('success'));
 
         // Multiple
         accList.remove(0);
-        result = sb.sqlDelete(accList);
+        result = sb.soqlDelete(accList);
         System.assertEquals(true, (Boolean)result.get('success'));
 
-        sb.sqlSelect('Id, Name');
-        List<Account> accList2 = sb.sqlGet('Account');
+        sb.soqlSelect('Id, Name');
+        List<Account> accList2 = sb.soqlGet('Account');
         System.assertEquals(0, accList2.size());
 
         // Error
         Integer level = 5;
-        result = sb.sqlDelete(level);
+        result = sb.soqlDelete(level);
         System.assertEquals(false, (Boolean)result.get('success'));
     }
 
@@ -528,7 +528,7 @@ public class SOQLBuilderTest {
         Account sObj = new Account();
         params = new Map<String, Object>{
             'Id'=>Id.valueOf('0051s000002MvFZAA0'),
-            'Name'=>'Misaka10021',
+            'Name'=>'John10021',
             'BillingCity'=>null,
             'NumberOfEmployees'=>1000
         };
@@ -536,7 +536,7 @@ public class SOQLBuilderTest {
 
         Account targetSObj = new Account();
         targetSObj.put('Id', Id.valueOf('0051s000002MvFZAA0'));
-        targetSObj.put('Name', 'Misaka10021');
+        targetSObj.put('Name', 'John10021');
         targetSObj.put('BillingCity', null);
         targetSObj.put('NumberOfEmployees', 1000);
  

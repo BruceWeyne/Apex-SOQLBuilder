@@ -10,45 +10,45 @@
 
 /**
  * /////////////////////////////
- *  Example for use of "SQL Construction" Methods
+ *  Example for use of "SOQL Construction" Methods
  * /////////////////////////////
- * SOQLBuilder sb = new SOQLBuilder();
- * sb.sqlSelect('Id');
- * sb.sqlSelect('Name'); // Also can be used like "sb.sqlSelect('Id, Name')" in a line
- * sb.sqlWhere('IsDeleted', false);
- * sb.sqlLike('Name', '%John%'); // In this case, "WHERE" clause will be concatenated with "AND"
- * sb.sqlOrderBy('Name DESC');
- * sb.sqlLimit(300);
- * sb.sqlOffset(100);
- * List<Account> acc = sb.sqlGet('Account'); // Query constructed above ends up executed here, and it returns data of List<sObject> type
+ * SOQLBuilder bld = new SOQLBuilder();
+ * bld.soqlSelect('Id');
+ * bld.soqlSelect('Name'); // Also can be used like "bld.soqlSelect('Id, Name')" in a line
+ * bld.soqlWhere('IsDeleted', false);
+ * bld.soqlLike('Name', '%John%'); // In this case, "WHERE" clause will be concatenated with "AND"
+ * bld.soqlOrderBy('Name DESC');
+ * bld.soqlLimit(300);
+ * bld.soqlOffset(100);
+ * List<Account> acc = bld.soqlGet('Account'); // Query constructed above ends up executed here, and it returns data of List<sObject> type
  *
  * Scripts above is completely the same as following,
  * List<Account> acc = [SELECT Id, Name From Account WHERE IsDeleted = false AND Name LIKE '%John%' ORDER BY Name DESC LIMIT 300 OFFSET 100];
  */
 
 public class SOQLBuilder {
-    private List<Map<String, Object>> sqlWhereMapList;
-    private List<Map<String, Object>> sqlOrWhereMapList;
-    private List<Map<String, Object>> sqlLikeMapList;
-    private List<Map<String, Object>> sqlOrLikeMapList;
-    private List<Map<String, Object>> sqlNotLikeMapList;
-    private List<Map<String, Object>> sqlOrNotLikeMapList;
-    private List<Map<String, Object>> sqlHavingMapList;
-    private Map<String, Object> sqlWhereInMap;
-    private Map<String, Object> sqlWhereNotInMap;
-    private Map<String, String> sqlOrderbyMap;
-    private Set<String> sqlFieldSet;
-    private Set<String> sqlGroupbySet;
-    private Integer sqlLimitVal;
-    private Integer sqlOffsetVal;
-    private Boolean sqlIsAllRows;
-    private Boolean sqlIsCache;
-    private Boolean sqlDebugWhenExecuted;
+    private List<Map<String, Object>> soqlWhereMapList;
+    private List<Map<String, Object>> soqlOrWhereMapList;
+    private List<Map<String, Object>> soqlLikeMapList;
+    private List<Map<String, Object>> soqlOrLikeMapList;
+    private List<Map<String, Object>> soqlNotLikeMapList;
+    private List<Map<String, Object>> soqlOrNotLikeMapList;
+    private List<Map<String, Object>> soqlHavingMapList;
+    private Map<String, Object> soqlWhereInMap;
+    private Map<String, Object> soqlWhereNotInMap;
+    private Map<String, String> soqlOrderbyMap;
+    private Set<String> soqlFieldSet;
+    private Set<String> soqlGroupbySet;
+    private Integer soqlLimitVal;
+    private Integer soqlOffsetVal;
+    private Boolean soqlIsAllRows;
+    private Boolean soqlIsCache;
+    private Boolean soqlDebugWhenExecuted;
 
     // Constructor
     public SOQLBuilder() {
         this.clear();
-        sqlDebugWhenExecuted = false; // true: Query is debugged on the Developer Console's Log EVERY TIME executed | false: Not debugged
+        soqlDebugWhenExecuted = false; // true: Query is debugged on the Developer Console's Log EVERY TIME executed | false: Not debugged
     }
 
     /**
@@ -57,252 +57,252 @@ public class SOQLBuilder {
      * [NOTE] Use this method to construct query from the start
      */
     public void clear() {
-        sqlFieldSet         = new Set<String>();
-        sqlWhereMapList     = new List<Map<String, Object>>{};
-        sqlOrWhereMapList   = new List<Map<String, Object>>{};
-        sqlLikeMapList      = new List<Map<String, Object>>{};
-        sqlOrLikeMapList    = new List<Map<String, Object>>{};
-        sqlNotLikeMapList   = new List<Map<String, Object>>{};
-        sqlOrNotLikeMapList = new List<Map<String, Object>>{};
-        sqlHavingMapList    = new List<Map<String, Object>>{};
-        sqlWhereInMap       = new Map<String, Object>{};
-        sqlWhereNotInMap    = new Map<String, Object>{};
-        sqlOrderbyMap       = new Map<String, String>{};
-        sqlGroupbySet       = new Set<String>();
-        sqlLimitVal         = null;
-        sqlOffsetVal        = null;
-        sqlIsAllRows        = null;
-        sqlIsCache          = false;
+        soqlFieldSet         = new Set<String>();
+        soqlWhereMapList     = new List<Map<String, Object>>{};
+        soqlOrWhereMapList   = new List<Map<String, Object>>{};
+        soqlLikeMapList      = new List<Map<String, Object>>{};
+        soqlOrLikeMapList    = new List<Map<String, Object>>{};
+        soqlNotLikeMapList   = new List<Map<String, Object>>{};
+        soqlOrNotLikeMapList = new List<Map<String, Object>>{};
+        soqlHavingMapList    = new List<Map<String, Object>>{};
+        soqlWhereInMap       = new Map<String, Object>{};
+        soqlWhereNotInMap    = new Map<String, Object>{};
+        soqlOrderbyMap       = new Map<String, String>{};
+        soqlGroupbySet       = new Set<String>();
+        soqlLimitVal         = null;
+        soqlOffsetVal        = null;
+        soqlIsAllRows        = null;
+        soqlIsCache          = false;
     }
 
     /**
-     * SQL SELECT Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL SELECT Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name] --- It is possible to get all fields of a sObject when set "*"
      * @return void
      * [NOTE] Also can call this method more than once to select multiple fields
      */
-    public void sqlSelect(String fieldName) {
+    public void soqlSelect(String fieldName) {
         if (fieldName == '*') {  // Other previous fields will be removed when "*" is set
-            sqlFieldSet.clear();
-            sqlFieldSet.add(fieldName);
-        } else if (!sqlFieldSet.contains('*')) { // New field can only be set without "*" in current field Set
-            sqlFieldSet.add(fieldName);
+            soqlFieldSet.clear();
+            soqlFieldSet.add(fieldName);
+        } else if (!soqlFieldSet.contains('*')) { // New field can only be set without "*" in current field Set
+            soqlFieldSet.add(fieldName);
         }
     }
 
     /**
-     * SQL WHERE Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL WHERE Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name]
      * @param {Object} fieldValue [sObject Field Value]
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by "AND"
      */
-    public void sqlWhere(String fieldName, Object fieldValue) {
-        Map<String, Object> sqlWhereMap = new Map<String, Object>{};
+    public void soqlWhere(String fieldName, Object fieldValue) {
+        Map<String, Object> soqlWhereMap = new Map<String, Object>{};
         if (String.isNotBlank(fieldName)) { // fieldName key will only be added when valid
-            sqlWhereMap.put(fieldName, fieldValue);
-            sqlWhereMapList.add(sqlWhereMap);
+            soqlWhereMap.put(fieldName, fieldValue);
+            soqlWhereMapList.add(soqlWhereMap);
         }
     }
 
     /**
-     * SQL OR WHERE Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL OR WHERE Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name]
      * @param {Object} fieldValue [sObject Field Value]
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by "OR"
      */
-    public void sqlOrWhere(String fieldName, Object fieldValue) {
-        Map<String, Object> sqlOrWhereMap = new Map<String, Object>{};
+    public void soqlOrWhere(String fieldName, Object fieldValue) {
+        Map<String, Object> soqlOrWhereMap = new Map<String, Object>{};
         if (String.isNotBlank(fieldName)) { // fieldName key will only be added when valid
-            sqlOrWhereMap.put(fieldName, fieldValue);
-            sqlOrWhereMapList.add(sqlOrWhereMap);
+            soqlOrWhereMap.put(fieldName, fieldValue);
+            soqlOrWhereMapList.add(soqlOrWhereMap);
         }
     }
 
     /**
-     * SQL LIKE Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL LIKE Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name]
      * @param {Object} fieldValue [sObject Field Value]
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by "AND"
      */
-    public void sqlLike(String fieldName, Object fieldValue) {
-        Map<String, Object> sqlLikeMap = new Map<String, Object>{};
+    public void soqlLike(String fieldName, Object fieldValue) {
+        Map<String, Object> soqlLikeMap = new Map<String, Object>{};
         if (String.isNotBlank(fieldName)) { // fieldName key will only be added when valid
-            sqlLikeMap.put(fieldName, fieldValue);
-            sqlLikeMapList.add(sqlLikeMap);
+            soqlLikeMap.put(fieldName, fieldValue);
+            soqlLikeMapList.add(soqlLikeMap);
         }
     }
 
     /**
-     * SQL OR LIKE Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL OR LIKE Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name]
      * @param {Object} fieldValue [sObject Field Value]
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by "OR"
      */
-    public void sqlOrLike(String fieldName, Object fieldValue) {
-        Map<String, Object> sqlOrLikeMap = new Map<String, Object>{};
+    public void soqlOrLike(String fieldName, Object fieldValue) {
+        Map<String, Object> soqlOrLikeMap = new Map<String, Object>{};
         if (String.isNotBlank(fieldName)) { // fieldName key will only be added when valid
-            sqlOrLikeMap.put(fieldName, fieldValue);
-            sqlOrLikeMapList.add(sqlOrLikeMap);
+            soqlOrLikeMap.put(fieldName, fieldValue);
+            soqlOrLikeMapList.add(soqlOrLikeMap);
         }
     }
 
     /**
-     * SQL NOT LIKE Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL NOT LIKE Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name]
      * @param {Object} fieldValue [sObject Field Value]
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by "AND"
      */
-    public void sqlNotLike(String fieldName, Object fieldValue) {
-        Map<String, Object> sqlNotLikeMap = new Map<String, Object>{};
+    public void soqlNotLike(String fieldName, Object fieldValue) {
+        Map<String, Object> soqlNotLikeMap = new Map<String, Object>{};
         if (String.isNotBlank(fieldName)) { // fieldName key will only be added when valid
-            sqlNotLikeMap.put(fieldName, fieldValue);
-            sqlNotLikeMapList.add(sqlNotLikeMap);
+            soqlNotLikeMap.put(fieldName, fieldValue);
+            soqlNotLikeMapList.add(soqlNotLikeMap);
         }
     }
 
     /**
-     * SQL OR NOT LIKE Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL OR NOT LIKE Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name]
      * @param {Object} fieldValue [sObject Field Value]
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by "OR"
      */
-    public void sqlOrNotLike(String fieldName, Object fieldValue) {
-        Map<String, Object> sqlOrNotLikeMap = new Map<String, Object>{};
+    public void soqlOrNotLike(String fieldName, Object fieldValue) {
+        Map<String, Object> soqlOrNotLikeMap = new Map<String, Object>{};
         if (String.isNotBlank(fieldName)) { // // fieldName key will only be added when valid
-            sqlOrNotLikeMap.put(fieldName, fieldValue);
-            sqlOrNotLikeMapList.add(sqlOrNotLikeMap);
+            soqlOrNotLikeMap.put(fieldName, fieldValue);
+            soqlOrNotLikeMapList.add(soqlOrNotLikeMap);
         }
     }
 
     /**
-     * SQL WHERE IN Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL WHERE IN Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name]
      * @param {Object} fieldValue [sObject Field Value]
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by "AND"
      */
-    public void sqlWhereIn(String fieldName, Object fieldValue) {
+    public void soqlWhereIn(String fieldName, Object fieldValue) {
         if (String.isNotBlank(fieldName)) { // // fieldName key will only be added when valid
-            sqlWhereInMap.put(fieldName, fieldValue);
+            soqlWhereInMap.put(fieldName, fieldValue);
         }
     }
 
     /**
-     * SQL WHERE NOT IN Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL WHERE NOT IN Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name]
      * @param {Object} fieldValue [sObject Field Value]
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by "AND"
      */
-    public void sqlWhereNotIn(String fieldName, Object fieldValue) {
+    public void soqlWhereNotIn(String fieldName, Object fieldValue) {
         if (String.isNotBlank(fieldName)) { // // fieldName key will only be added when valid
-            sqlWhereNotInMap.put(fieldName, fieldValue);
+            soqlWhereNotInMap.put(fieldName, fieldValue);
         }
     }
 
     /**
-     * SQL LIMIT Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL LIMIT Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {Integer} limitVal [Maximum number of rows to get sObject records]
      * @return void
      *[NOTE] Condition will be override when this meheod is called more than once
      */
-    public void sqlLimit(Integer limitVal) {
+    public void soqlLimit(Integer limitVal) {
         if (limitVal != null) {
-            sqlLimitVal = limitVal;
+            soqlLimitVal = limitVal;
         }
     }
 
     /**
-     * SQL LIMIT Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL LIMIT Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {Integer} offsetVal [Start number of record row position to get sObject records]
      * @return void
      *[NOTE] Condition will be override when this meheod is called more than once
      */
-    public void sqlOffset(Integer offsetVal) {
+    public void soqlOffset(Integer offsetVal) {
         if (offsetVal != null) {
-            sqlOffsetVal = offsetVal;
+            soqlOffsetVal = offsetVal;
         }
     }
 
     /**
-     * SQL WHERE IN Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL WHERE IN Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name]
      * @param {String} sortName [Sort Type] ASC, DESC, NULLS FIRST, NULLS LAST
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by comma ","
      */
-    public void sqlOrderBy(String fieldName, String sortName) {
+    public void soqlOrderBy(String fieldName, String sortName) {
         if (String.isNotBlank(fieldName)) { // // fieldName key will only be added when valid
-            sqlOrderbyMap.put(fieldName, sortName);
+            soqlOrderbyMap.put(fieldName, sortName);
         }
     }
 
     /**
-     * SQL GROUP BY Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL GROUP BY Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} orderbyStr [sObject Field Name]
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by comma ","
      */
-    public void sqlGroupBy(String fieldName) {
+    public void soqlGroupBy(String fieldName) {
         if (String.isNotBlank(fieldName)) { // 値が有効な値の場合のみ追加
-            sqlGroupbySet.add(fieldName);
+            soqlGroupbySet.add(fieldName);
         }
     }
 
 
     /**
-     * SQL HAVING Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL HAVING Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param {String} fieldName [sObject Field Name]
      * @param {Object} fieldValue [sObject Field Value]
      * @return void
      * [NOTE] Also can call this method more than once to add more conditions, which are concatinated by "AND"
      */
-    public void sqlHaving(String fieldName, Object fieldValue) {
-        Map<String, Object> sqlHavingMap = new Map<String, Object>{};
+    public void soqlHaving(String fieldName, Object fieldValue) {
+        Map<String, Object> soqlHavingMap = new Map<String, Object>{};
         if (String.isNotBlank(fieldName)) { // // fieldName key will only be added when valid
-            sqlHavingMap.put(fieldName, fieldValue);
-            sqlHavingMapList.add(sqlHavingMap);
+            soqlHavingMap.put(fieldName, fieldValue);
+            soqlHavingMapList.add(soqlHavingMap);
         }
     }
 
     /**
-     * SQL ALL ROWS Construction :To be used with "sqlGet" or "sqlQuery" method
+     * SOQL ALL ROWS Construction :To be used with "soqlGet" or "soqlQuery" method
      * @param NONE
      * @return void
      * [NOTE] "ALL ROWS" sentence will be added when this method is just called
      */
-    public void sqlAllRows() {
-        sqlIsAllRows = true;
+    public void soqlAllRows() {
+        soqlIsAllRows = true;
     }
 
     /**
-     * Keep SQL Construction after query is executed
+     * Keep SOQL Construction after query is executed
      * @param NONE
      * @return void
-     * [NOTE] SQL Construction cache will be kept after this method is just called
+     * [NOTE] SOQL Construction cache will be kept after this method is just called
      * [NOTE] Call "clear" method to stop this cache feature
      */
-    public void sqlStartCache() {
-        sqlIsCache = true;
+    public void soqlStartCache() {
+        soqlIsCache = true;
     }
 
     /**
-     * Query Execution Method for SQL Construction
+     * Query Execution Method for SOQL Construction
      * @param {String} sObjectName [sObject Name]
      * @return List<sObject> LIST of sObject records
      * [NOTE] Also can call this method singly, which EXECUTEs simple query such as "SELECT * FROM [sObject]"
      * [NOTE] Actual executtion of query is carried out by "getSObjRecords" method
      */
-    public List<sObject> sqlGet(String sObjectName) {
+    public List<sObject> soqlGet(String sObjectName) {
         Map<String, Object> queryParams = this.createQueryParams(); // Create parameters for query construction
         List<sObject> sObjList = this.getSObjRecords(sObjectName, queryParams); // Query is executed the very here
-        if (!sqlIsCache) { // SQL Construction will be initialized when sqlIsCache is false
+        if (!soqlIsCache) { // SOQL Construction will be initialized when soqlIsCache is false
             this.clear();
         }
         return sObjList;
@@ -311,68 +311,68 @@ public class SOQLBuilder {
     /**
      * Simple Query Return Method
      * @param {String} sObjectName [sObject Name]
-     * @return {String} STRING of query created with SQL Construction
+     * @return {String} STRING of query created with SOQL Construction
      * [NOTE] Also can call this method singly, which CREATEs simple query such as "SELECT * FROM [sObject]"
      */
-    public String sqlQuery(String sObjectName) {
+    public String soqlQuery(String sObjectName) {
         Map<String, Object> queryParams = this.createQueryParams(); // Create parameters for query construction
-        String queryStr = this.createQueryStr(sObjectName, queryParams); // Create query itself with SQL Construction
-        if (!sqlIsCache) { // SQL Construction will be initialized when sqlIsCache is false
+        String queryStr = this.createQueryStr(sObjectName, queryParams); // Create query itself with SOQL Construction
+        if (!soqlIsCache) { // SOQL Construction will be initialized when soqlIsCache is false
             this.clear();
         }
         return queryStr;
     }
 
     /**
-     * Create Parameters to construct SQL sentence
-     * @return {Map<String, Object>} Parameters to construct SQL sentence
+     * Create Parameters to construct SOQL sentence
+     * @return {Map<String, Object>} Parameters to construct SOQL sentence
      */
     public Map<String, Object> createQueryParams() {
         Map<String, Object> queryParams = new Map<String, Object>{}; // Initialize query parameters
-        if (!sqlFieldSet.isEmpty() && !sqlFieldSet.contains('*')) { // SELECT Sentence
-            queryParams.put('field', sqlFieldSet);
+        if (!soqlFieldSet.isEmpty() && !soqlFieldSet.contains('*')) { // SELECT Sentence
+            queryParams.put('field', soqlFieldSet);
         }
-        if (!sqlWhereMapList.isEmpty()) { // WHERE clause
-            queryParams.put('where', sqlWhereMapList);
+        if (!soqlWhereMapList.isEmpty()) { // WHERE clause
+            queryParams.put('where', soqlWhereMapList);
         }
-        if (!sqlOrWhereMapList.isEmpty()) { // OR WHERE clause
-            queryParams.put('or_where', sqlOrWhereMapList);
+        if (!soqlOrWhereMapList.isEmpty()) { // OR WHERE clause
+            queryParams.put('or_where', soqlOrWhereMapList);
         }
-        if (!sqlLikeMapList.isEmpty()) { // LIKE clause
-            queryParams.put('like', sqlLikeMapList);
+        if (!soqlLikeMapList.isEmpty()) { // LIKE clause
+            queryParams.put('like', soqlLikeMapList);
         }
-        if (!sqlOrLikeMapList.isEmpty()) { // OR LIKE clause
-            queryParams.put('or_like', sqlOrLikeMapList);
+        if (!soqlOrLikeMapList.isEmpty()) { // OR LIKE clause
+            queryParams.put('or_like', soqlOrLikeMapList);
         }
-        if (!sqlNotLikeMapList.isEmpty()) { // NOT LIKE clause
-            queryParams.put('not_like', sqlNotLikeMapList);
+        if (!soqlNotLikeMapList.isEmpty()) { // NOT LIKE clause
+            queryParams.put('not_like', soqlNotLikeMapList);
         }
-        if (!sqlOrNotLikeMapList.isEmpty()) { // OR NOT LIKE clause
-            queryParams.put('or_not_like', sqlOrNotLikeMapList);
+        if (!soqlOrNotLikeMapList.isEmpty()) { // OR NOT LIKE clause
+            queryParams.put('or_not_like', soqlOrNotLikeMapList);
         }
-        if (!sqlWhereInMap.isEmpty()) { // WHERE IN clause
-            queryParams.put('where_in', sqlWhereInMap);
+        if (!soqlWhereInMap.isEmpty()) { // WHERE IN clause
+            queryParams.put('where_in', soqlWhereInMap);
         }
-        if (!sqlWhereNotInMap.isEmpty()) { // WHERE NOT IN clause
-            queryParams.put('where_not_in', sqlWhereNotInMap);
+        if (!soqlWhereNotInMap.isEmpty()) { // WHERE NOT IN clause
+            queryParams.put('where_not_in', soqlWhereNotInMap);
         }
-        if (sqlLimitVal != null) { // LIMIT clause
-            queryParams.put('limit', sqlLimitVal);
+        if (soqlLimitVal != null) { // LIMIT clause
+            queryParams.put('limit', soqlLimitVal);
         }
-        if (sqlOffsetVal != null) { // OFFSET clause
-            queryParams.put('offset', sqlOffsetVal);
+        if (soqlOffsetVal != null) { // OFFSET clause
+            queryParams.put('offset', soqlOffsetVal);
         }
-        if (!sqlOrderbyMap.isEmpty()) { // ORDER BY clause
-            queryParams.put('order_by', sqlOrderbyMap);
+        if (!soqlOrderbyMap.isEmpty()) { // ORDER BY clause
+            queryParams.put('order_by', soqlOrderbyMap);
         }
-        if (!sqlGroupbySet.isEmpty()) { // GROUP BY clause
-            queryParams.put('group_by', sqlGroupbySet);
+        if (!soqlGroupbySet.isEmpty()) { // GROUP BY clause
+            queryParams.put('group_by', soqlGroupbySet);
         }
-        if (!sqlHavingMapList.isEmpty()) { // HAVING clause
-            queryParams.put('having', sqlHavingMapList);
+        if (!soqlHavingMapList.isEmpty()) { // HAVING clause
+            queryParams.put('having', soqlHavingMapList);
         }
-        if (sqlIsAllRows != null) { // ALL ROWS clause
-            queryParams.put('all_rows', sqlIsAllRows);
+        if (soqlIsAllRows != null) { // ALL ROWS clause
+            queryParams.put('all_rows', soqlIsAllRows);
         }
         // Return Query Parameters
         return queryParams;
@@ -400,7 +400,7 @@ public class SOQLBuilder {
     public List<sObject> getSObjRecords(String sObjectName, Map<String, Object> params) {
         // Create query sentence
         String queryStr = this.createQueryStr(sObjectName, params);
-        if (sqlDebugWhenExecuted) {
+        if (soqlDebugWhenExecuted) {
             System.debug('[Query] ' + queryStr);
         }
         // Execute query
@@ -410,7 +410,7 @@ public class SOQLBuilder {
     }
 
     /**
-     * Create SQL query sentence method
+     * Create SOQL query sentence method
      * @param {String} sObjectName [sObject Name]
      * @param {Map<String, Object>} params [Parameters] nullable
      * [Parameter keys] field, where, limit, offset, order_by, group_by, etc.
@@ -936,7 +936,7 @@ public class SOQLBuilder {
      * @param {Map<String, Object>} params [Parameters for field/value of sObject]
      * @return {Map<String, Object>} success: Boolean for status of success, error: error objects like DmlException type when error occurs
      */
-    public Map<String, Object> sqlInsert(Object sObjCollection, Map<String, Object> params) {
+    public Map<String, Object> soqlInsert(Object sObjCollection, Map<String, Object> params) {
         Map<String, Object> resultMap = new Map<String, Object>{'success'=>true, 'error'=>null};
         try {
             if (sObjCollection instanceof List<sObject>) { // When List<sObject> type
@@ -972,7 +972,7 @@ public class SOQLBuilder {
      * @param {Map<String, Object>} params [Parameters for field/value of sObject]
      * @return {List<Database.SaveResult>}
      */
-    public List<Database.SaveResult> sqlInsertAll(Object sObjCollection, Map<String, Object> params) {
+    public List<Database.SaveResult> soqlInsertAll(Object sObjCollection, Map<String, Object> params) {
         Boolean allOrNone = false;
         List<Database.SaveResult> srList = new List<Database.SaveResult>();
         if (sObjCollection instanceof List<sObject>) { // When List<sObject> type
@@ -1001,7 +1001,7 @@ public class SOQLBuilder {
      * @param {Map<String, Object>} params [Parameters for field/value of sObject]
      * @return {Map<String, Object>} success: Boolean for status of success, error: error objects like DmlException type when error occurs
      */
-    public Map<String, Object> sqlUpdate(Object sObjCollection, Map<String, Object> params) {
+    public Map<String, Object> soqlUpdate(Object sObjCollection, Map<String, Object> params) {
         Map<String, Object> resultMap = new Map<String, Object>{'success'=>true, 'error'=>null};
         try {
             if (sObjCollection instanceof List<sObject>) { // When List<sObject> type
@@ -1038,7 +1038,7 @@ public class SOQLBuilder {
      * @param {Map<String, Object>} params [Parameters for field/value of sObject]
      * @return {List<Database.SaveResult>}
      */
-    public List<Database.SaveResult> sqlUpdateAll(Object sObjCollection, Map<String, Object> params) {
+    public List<Database.SaveResult> soqlUpdateAll(Object sObjCollection, Map<String, Object> params) {
         Boolean allOrNone = false;
         List<Database.SaveResult> srList = new List<Database.SaveResult>();
         if (sObjCollection instanceof List<sObject>) { // When List<sObject> type
@@ -1067,7 +1067,7 @@ public class SOQLBuilder {
      * @param {Map<String, Object>} params [Parameters for field/value of sObject]
      * @return {Map<String, Object>} success: Boolean for status of success, error: error objects like DmlException type when error occurs
      */
-    public Map<String, Object> sqlUpsert(Object sObjCollection, Map<String, Object> params) {
+    public Map<String, Object> soqlUpsert(Object sObjCollection, Map<String, Object> params) {
         Map<String, Object> resultMap = new Map<String, Object>{'success'=>true, 'error'=>null};
         try {
             if (sObjCollection instanceof List<sObject>) { // When List<sObject> type
@@ -1103,7 +1103,7 @@ public class SOQLBuilder {
      * @param {Map<String, Object>} params [Parameters for field/value of sObject]
      * @return {Map<String, Object>} success: Boolean for status of success, error: error objects like DmlException type when error occurs
      */
-    public Map<String, Object> sqlDelete(Object sObjCollection) {
+    public Map<String, Object> soqlDelete(Object sObjCollection) {
         Map<String, Object> resultMap = new Map<String, Object>{'success'=>true, 'error'=>null};
         try {
             if (sObjCollection instanceof List<sObject>) { // When List<sObject> type
@@ -1132,10 +1132,10 @@ public class SOQLBuilder {
      * @return void
      * Execute insert/update/upsert for the sObject record after this method is called
      * [Example for use]
-     * SOQLBuilder sb = new SOQLBuilder();
+     * SOQLBuilder bld = new SOQLBuilder();
      * Account acc = new Account();
-     * Map<String, Object> param = new Map<String, Object>{'Name' => 'Misaka', 'BillingCity' => 'Academic city', 'BillingCountry' => 'Japan', 'BillingState' => 'Tokyo', 'NumberOfEmployees' => 100};
-     * sb.setSObjParams(acc, param);
+     * Map<String, Object> param = new Map<String, Object>{'Name' => 'John', 'BillingCity' => 'Academic city', 'BillingCountry' => 'Japan', 'BillingState' => 'Tokyo', 'NumberOfEmployees' => 100};
+     * bld.setSObjParams(acc, param);
      */
     public void setSObjParams(sObject sObj, Map<String, Object> params) {
         Object eachParam;

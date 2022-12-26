@@ -20,112 +20,112 @@
 	"SOQLBuilder Generate Instance": {
 		"prefix": "new SOQLBuilder",
 		"body": [
-			"SOQLBuilder $sb = new SOQLBuilder();"
+			"SOQLBuilder $bld = new SOQLBuilder();"
 		],
 		"description": "SOQLBuilder Generate Instance"
 	},
 	"SOQLBuilder SELECT Clause": {
-		"prefix": "sqlSelect",
+		"prefix": "soqlSelect",
 		"body": [
-			"$classInstance.sqlSelect('$fieldName');"
+			"$classInstance.soqlSelect('$fieldName');"
 		],
 		"description": "SOQLBuilder SELECT Clause"
 	},
 	"SOQLBuilder WHERE Clause": {
-		"prefix": "sqlWhere",
+		"prefix": "soqlWhere",
 		"body": [
-			"$classInstance.sqlWhere('$fieldName', $fieldValue);"
+			"$classInstance.soqlWhere('$fieldName', $fieldValue);"
 		],
 		"description": "SOQLBuilder WHERE Clause"
 	},
 	"SOQLBuilder OR WHERE Clause": {
-		"prefix": "sqlOrWhere",
+		"prefix": "soqlOrWhere",
 		"body": [
-			"$classInstance.sqlOrWhere('$fieldName', $fieldValue);"
+			"$classInstance.soqlOrWhere('$fieldName', $fieldValue);"
 		],
 		"description": "SOQLBuilder OR WHERE Clause"
 	},
 	"SOQLBuilder WHERE IN Clause": {
-		"prefix": "sqlWhereIn",
+		"prefix": "soqlWhereIn",
 		"body": [
-			"$classInstance.sqlWhereIn('$fieldName', $valueSet);"
+			"$classInstance.soqlWhereIn('$fieldName', $valueSet);"
 		],
 		"description": "SOQLBuilder WHERE IN Clause"
 	},
 	"SOQLBuilder WHERE NOT IN Clause": {
-		"prefix": "sqlWhereNotIn",
+		"prefix": "soqlWhereNotIn",
 		"body": [
-			"$classInstance.sqlWhereNotIn('$fieldName', $valueSet);"
+			"$classInstance.soqlWhereNotIn('$fieldName', $valueSet);"
 		],
 		"description": "SOQLBuilder WHERE NOT IN Clause"
 	},
 	"SOQLBuilder LIKE Clause": {
-		"prefix": "sqlLike",
+		"prefix": "soqlLike",
 		"body": [
-			"$classInstance.sqlLike('$fieldName', '%likeValue%');"
+			"$classInstance.soqlLike('$fieldName', '%likeValue%');"
 		],
 		"description": "SOQLBuilder LIKE Clause"
 	},
 	"SOQLBuilder OR LIKE Clause": {
-		"prefix": "sqlOrLike",
+		"prefix": "soqlOrLike",
 		"body": [
-			"$classInstance.sqlOrLike('$fieldName', '%likeValue%');"
+			"$classInstance.soqlOrLike('$fieldName', '%likeValue%');"
 		],
 		"description": "SOQLBuilder OR LIKE Clause"
 	},
 	"SOQLBuilder NOT LIKE Clause": {
-		"prefix": "sqlNotLike",
+		"prefix": "soqlNotLike",
 		"body": [
-			"$classInstance.sqlNotLike('$fieldName', '%likeValue%');"
+			"$classInstance.soqlNotLike('$fieldName', '%likeValue%');"
 		],
 		"description": "SOQLBuilder NOT LIKE Clause"
 	},
 	"SOQLBuilder OR NOT LIKE Clause": {
-		"prefix": "sqlOrNotLike",
+		"prefix": "soqlOrNotLike",
 		"body": [
-			"$classInstance.sqlOrNotLike('$fieldName', '%likeValue%');"
+			"$classInstance.soqlOrNotLike('$fieldName', '%likeValue%');"
 		],
 		"description": "SOQLBuilder OR NOT LIKE Clause"
 	},
 	"SOQLBuilder LIMIT Clause": {
-		"prefix": "sqlLimit",
+		"prefix": "soqlLimit",
 		"body": [
-			"$classInstance.sqlLimit($limitValue);"
+			"$classInstance.soqlLimit($limitValue);"
 		],
 		"description": "SOQLBuilder LIMIT Clause"
 	},
 	"SOQLBuilder OFFSET Clause": {
-		"prefix": "sqlOffset",
+		"prefix": "soqlOffset",
 		"body": [
-			"$classInstance.sqlOffset($offsetValue);"
+			"$classInstance.soqlOffset($offsetValue);"
 		],
 		"description": "SOQLBuilder OFFSET Clause"
 	},
 	"SOQLBuilder ORDER BY Clause": {
-		"prefix": "sqlOrderBy",
+		"prefix": "soqlOrderBy",
 		"body": [
-			"$classInstance.sqlOrderBy('$fieldName', '$sortKey');"
+			"$classInstance.soqlOrderBy('$fieldName', '$sortKey');"
 		],
 		"description": "SOQLBuilder ORDER BY Clause"
 	},
 	"SOQLBuilder GROUP BY Clause": {
-		"prefix": "sqlGroupBy",
+		"prefix": "soqlGroupBy",
 		"body": [
-			"$classInstance.sqlGroupBy('$fieldName');"
+			"$classInstance.soqlGroupBy('$fieldName');"
 		],
 		"description": "SOQLBuilder GROUP BY Clause"
 	},
 	"SOQLBuilder HAVING Clause": {
-		"prefix": "sqlHaving",
+		"prefix": "soqlHaving",
 		"body": [
-			"$classInstance.sqlHaving('$fieldName', $fieldValue);"
+			"$classInstance.soqlHaving('$fieldName', $fieldValue);"
 		],
 		"description": "SOQLBuilder HAVING Clause"
 	},
 	"SOQLBuilder Keep methods' cache": {
-		"prefix": "sqlStartCache",
+		"prefix": "soqlStartCache",
 		"body": [
-			"$classInstance.sqlStartCache();"
+			"$classInstance.soqlStartCache();"
 		],
 		"description": "SOQLBuilder Keep methods' cache"
 	},
@@ -137,32 +137,32 @@
 		"description": "SOQLBuilder Clear methods' cache"
 	},
 	"SOQLBuilder Execute query": {
-		"prefix": "sqlGet",
+		"prefix": "soqlGet",
 		"body": [
-			"List<$sObject> $sObjectList = $classInstance.sqlGet('$sObject');"
+			"List<$sObject> $sObjectList = $classInstance.soqlGet('$sObject');"
 		],
-		"description": "SOQLBuilder Execute query constructed by SQL Construction Methods"
+		"description": "SOQLBuilder Execute query constructed by SOQL Construction Methods"
 	},
 	"SOQLBuilder Generate query": {
-		"prefix": "sqlQuery",
+		"prefix": "soqlQuery",
 		"body": [
-			"String $query = $classInstance.sqlQuery('$sObject');"
+			"String $query = $classInstance.soqlQuery('$sObject');"
 		],
-		"description": "SOQLBuilder Generate query constructed by SQL Construction Methods"
+		"description": "SOQLBuilder Generate query constructed by SOQL Construction Methods"
 	},
 	"SOQLBuilder Method Basic Pack": {
-		"prefix": "sqlBasicPack",
+		"prefix": "soqlBasicPack",
 		"body": [
-			"$classInstance.sqlSelect('$fieldName');",
-			"$classInstance.sqlWhere('$targetFieldName', $fieldValue);",
-			"List<$sObject> $sObjectList = $classInstance.sqlGet('$sObject');"
+			"$classInstance.soqlSelect('$fieldName');",
+			"$classInstance.soqlWhere('$targetFieldName', $fieldValue);",
+			"List<$sObject> $sObjectList = $classInstance.soqlGet('$sObject');"
 		],
 		"description": "SOQLBuilder Method Basic Pack"
 	},
 	"SOQLBuilder DML Insert": {
-		"prefix": "sqlInsert",
+		"prefix": "soqlInsert",
 		"body": [
-			"Map<String, Object> $result = $classInstance.sqlInsert($sObjectCollection, $sObjFieldParams);",
+			"Map<String, Object> $result = $classInstance.soqlInsert($sObjectCollection, $sObjFieldParams);",
 			"",
 			"if (!(Boolean)$result.get('success')) { // When failed",
 			"\t// Process for failure",
@@ -173,9 +173,9 @@
 		"description": "SOQLBuilder DML Insert"
 	},
 	"SOQLBuilder DML Insert All": {
-		"prefix": "sqlInsertAll",
+		"prefix": "soqlInsertAll",
 		"body": [
-			"List<Database.SaveResult> $srList = $classInstance.sqlInsertAll($sObjectCollection, $sObjFieldParams);",
+			"List<Database.SaveResult> $srList = $classInstance.soqlInsertAll($sObjectCollection, $sObjFieldParams);",
 			"",
 			"for (Database.SaveResult sr : $srList) {",
 			"\tif (sr.isSuccess()) { // When succeeded",
@@ -193,9 +193,9 @@
 		"description": "SOQLBuilder DML Insert All"
 	},
 	"SOQLBuilder DML Update": {
-		"prefix": "sqlUpdatet",
+		"prefix": "soqlUpdatet",
 		"body": [
-			"Map<String, Object> $result = $classInstance.sqlUpdatet($sObjectCollection, $sObjFieldParams);",
+			"Map<String, Object> $result = $classInstance.soqlUpdatet($sObjectCollection, $sObjFieldParams);",
 			"",
 			"if (!(Boolean)$result.get('success')) { // When failed",
 			"\t// Process for failure",
@@ -206,9 +206,9 @@
 		"description": "SOQLBuilder DML Update"
 	},
 	"SOQLBuilder DML Update All": {
-		"prefix": "sqlUpdateAll",
+		"prefix": "soqlUpdateAll",
 		"body": [
-			"List<Database.SaveResult> $srList = $classInstance.sqlUpdateAll($sObjectCollection, $sObjFieldParams);",
+			"List<Database.SaveResult> $srList = $classInstance.soqlUpdateAll($sObjectCollection, $sObjFieldParams);",
 			"",
 			"for (Database.SaveResult sr : $srList) {",
 			"\tif (sr.isSuccess()) { // When succeeded",
@@ -226,9 +226,9 @@
 		"description": "SOQLBuilder DML Update All"
 	},
 	"SOQLBuilder DML Upsert": {
-		"prefix": "sqlUpsert",
+		"prefix": "soqlUpsert",
 		"body": [
-			"Map<String, Object> $result = $classInstance.sqlUpsert($sObjectCollection, $sObjFieldParams);",
+			"Map<String, Object> $result = $classInstance.soqlUpsert($sObjectCollection, $sObjFieldParams);",
 			"",
 			"if (!(Boolean)$result.get('success')) { // When failed",
 			"\t// Process for failure",
@@ -239,9 +239,9 @@
 		"description": "SOQLBuilder DML Upsert"
 	},
 	"SOQLBuilder DML Delete": {
-		"prefix": "sqlDelete",
+		"prefix": "soqlDelete",
 		"body": [
-			"Map<String, Object> $result = $classInstance.sqlDelete($sObjectCollection);",
+			"Map<String, Object> $result = $classInstance.soqlDelete($sObjectCollection);",
 			"",
 			"if (!(Boolean)$result.get('success')) { // When failed",
 			"\t// Process for failure",

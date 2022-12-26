@@ -3,7 +3,7 @@
 
 # 目次
 - [クラスの呼び出し（インスタンスの生成）](#クラスの呼び出しインスタンスの生成)
-- [SQL 構文メソッド（レコード取得）](#SQL-構文メソッド)
+- [SOQL 構文メソッド（レコード取得）](#SOQL-構文メソッド)
     - [SELECT 構文メソッド](#SELECT-構文メソッド)
     - [WHERE 構文メソッド](#WHERE-構文メソッド)
     - [OR WHERE 構文メソッド](#OR-WHERE-構文メソッド)
@@ -18,10 +18,10 @@
     - [ORDER BY 構文メソッド](#ORDER-BY-構文メソッド)
     - [GROUP BY 構文メソッド](#GROUP-BY-構文メソッド)
     - [HAVING 構文メソッド](#HAVING-構文メソッド)
-    - [SQL 構文キャッシュメソッド](#SQL-構文キャッシュメソッド)
-    - [SQL 構文の初期化メソッド](#SQL-構文の初期化メソッド)
-    - [★SQL 構文の実行（レコードの取得）メソッド](#SQL-構文の実行レコードの取得メソッド)
-    - [★SQL 構文のクエリ生成メソッド](#SQL-構文のクエリ生成メソッド)
+    - [SOQL 構文キャッシュメソッド](#SOQL-構文キャッシュメソッド)
+    - [SOQL 構文の初期化メソッド](#SOQL-構文の初期化メソッド)
+    - [★SOQL 構文の実行（レコードの取得）メソッド](#SOQL-構文の実行レコードの取得メソッド)
+    - [★SOQL 構文のクエリ生成メソッド](#SOQL-構文のクエリ生成メソッド)
 - [DML 操作メソッド（レコード操作）](#DML-操作メソッド)
     - [Insert（挿入）処理](#insert挿入処理)
     - [Insert All（一括挿入）処理](#Insert-All一括挿入処理)
@@ -32,27 +32,27 @@
 
 # クラスの呼び出し（インスタンスの生成）
 ```apex
-SOQLBuilder sb = new SOQLBuilder(); // 変数名は任意、ここでは sb
+SOQLBuilder bld = new SOQLBuilder(); // 変数名は任意、ここでは bld
 ```
 
-# SQL 構文メソッド
-インスタンス生成後に使用できるメソッドとして、「SQL 構文メソッド」を用意した。  
+# SOQL 構文メソッド
+インスタンス生成後に使用できるメソッドとして、「SOQL 構文メソッド」を用意した。  
 これらは、sObject からレコードを取得するためのメソッドである。
 
 ## SELECT 構文メソッド
 ```apex
-sb.sqlSelect(fieldName);
+bld.soqlSelect(fieldName);
 ```
 
 使用例
 ```apex
-sb.sqlSelect('Id, Name, IsActive');
+bld.soqlSelect('Id, Name, IsActive');
 
 // または
 
-sb.sqlSelect('Id');
-sb.sqlSelect('Name');
-sb.sqlSelect('IsActive');
+bld.soqlSelect('Id');
+bld.soqlSelect('Name');
+bld.soqlSelect('IsActive');
 
 // 上記のようにメソッドをコールすると、以下の SELECT 句の生成が予約される
 // SELECT Id, Name, IsActive
@@ -60,19 +60,19 @@ sb.sqlSelect('IsActive');
 
 ## WHERE 構文メソッド
 ```apex
-sb.sqlWhere(fieldName, fieldValue);
+bld.soqlWhere(fieldName, fieldValue);
 ```
 
 使用例 - 1
 ```apex
-sb.sqlWhere('Id', '00s4h00000216cCDXW');
+bld.soqlWhere('Id', '00s4h00000216cCDXW');
 
 // 上記のようにメソッドをコールすると、以下の WHERE 句の生成が予約される
 // WHERE Id = '00s4h00000216cCDXW'
 ```
 
 ```apex
-sb.sqlWhere('Id !=', '00s4h00000216cCDXW');
+bld.soqlWhere('Id !=', '00s4h00000216cCDXW');
 
 // キー名に比較演算子を含めることも可能（キー名と比較演算子の間にスペース必須）
 // WHERE Id != '00s4h00000216cCDXW'
@@ -80,8 +80,8 @@ sb.sqlWhere('Id !=', '00s4h00000216cCDXW');
 
 使用例 - 2
 ```apex
-sb.sqlWhere('Name', '御坂 美琴');
-sb.sqlWhere('IsActive', true);
+bld.soqlWhere('Name', '御坂 美琴');
+bld.soqlWhere('IsActive', true);
 
 // 複数回コールすると AND 接続となる
 // WHERE Name = '御坂 美琴' AND IsActive = true
@@ -89,26 +89,26 @@ sb.sqlWhere('IsActive', true);
 
 ## OR WHERE 構文メソッド
 ```apex
-sb.sqlOrWhere(fieldName, fieldValue);
+bld.soqlOrWhere(fieldName, fieldValue);
 ```
 
 使用例
 ```apex
-sb.sqlWhere('Name', '御坂 美琴');
-sb.sqlOrWhere('IsActive', false);
-sb.sqlOrWhere('Email !=', 'kuroko.shirai@tokiwa.ac.jp');
+bld.soqlWhere('Name', '御坂 美琴');
+bld.soqlOrWhere('IsActive', false);
+bld.soqlOrWhere('Email !=', 'kuroko.shirai@tokiwa.ac.jp');
 
 // WHERE Name = '御坂 美琴' OR IsActive = false OR Email != 'kuroko.shirai@tokiwa.ac.jp'
 ```
 
 ## LIKE 構文メソッド
 ```apex
-sb.sqlLike(fieldName, fieldValue);
+bld.soqlLike(fieldName, fieldValue);
 ```
 
 使用例 - 1
 ```apex
-sb.sqlLike('Name', '%御坂%');
+bld.soqlLike('Name', '%御坂%');
 
 // 上記のようにメソッドをコールすると、以下の LIKE 句の生成が予約される
 // WHERE Name LIKE %御坂%;
@@ -116,8 +116,8 @@ sb.sqlLike('Name', '%御坂%');
 
 使用例 - 2
 ```apex
-sb.sqlLike('Name', '%御坂%');
-sb.sqlLike('Name', '%琴%');
+bld.soqlLike('Name', '%御坂%');
+bld.soqlLike('Name', '%琴%');
 
 // 複数回コールすると AND 接続となる
 // WHERE Name LIKE %御坂% AND LIKE %琴%;
@@ -125,25 +125,25 @@ sb.sqlLike('Name', '%琴%');
 
 ## OR LIKE 構文メソッド
 ```apex
-sb.sqlOrLike(fieldName, fieldValue);
+bld.soqlOrLike(fieldName, fieldValue);
 ```
 
 使用例
 ```apex
-sb.sqlLike('Name', '%御坂%');
-sb.sqlOrLike('Name', '%琴%');
+bld.soqlLike('Name', '%御坂%');
+bld.soqlOrLike('Name', '%琴%');
 
 // WHERE Name LIKE %御坂% OR LIKE %琴%;
 ```
 
 ## NOT LIKE 構文メソッド
 ```apex
-sb.sqlNotLike(fieldName, fieldValue);
+bld.soqlNotLike(fieldName, fieldValue);
 ```
 
 使用例 - 1
 ```apex
-sb.sqlNotLike('Name', '%白井%');
+bld.soqlNotLike('Name', '%白井%');
 
 // 上記のようにメソッドをコールすると、以下の NOT LIKE 句の生成が予約される
 // WHERE NOT Name LIKE %白井%;
@@ -151,8 +151,8 @@ sb.sqlNotLike('Name', '%白井%');
 
 使用例 - 2
 ```apex
-sb.sqlNotLike('Name', '%白井%');
-sb.sqlNotLike('Name', '%黒%');
+bld.soqlNotLike('Name', '%白井%');
+bld.soqlNotLike('Name', '%黒%');
 
 // 複数回コールすると AND 接続となる
 // WHERE (NOT Name LIKE %白井%) AND (NOT LIKE %黒%);
@@ -160,30 +160,30 @@ sb.sqlNotLike('Name', '%黒%');
 
 ## OR NOT LIKE 構文メソッド
 ```apex
-sb.sqlOrNotLike(fieldName, fieldValue);
+bld.soqlOrNotLike(fieldName, fieldValue);
 ```
 
 使用例
 ```apex
-sb.sqlLike('Name', '%御坂%');
-sb.sqlOrNotLike('Name', '%白井%');
+bld.soqlLike('Name', '%御坂%');
+bld.soqlOrNotLike('Name', '%白井%');
 
 // WHERE Name LIKE %御坂% OR (NOT LIKE %白井%);
 ```
 
 ## WHERE IN 構文メソッド
 ```apex
-sb.sqlWhereIn(fieldName, fieldValue); // fieldValue は Set 型でも可
+bld.soqlWhereIn(fieldName, fieldValue); // fieldValue は Set 型でも可
 ```
 
 使用例
 ```apex
-sb.sqlWhereIn('Id', '\'00s4h00000216cCDXW\', \'00s5h00000336cFSRH\', \'00s7h00000686cJYZC\''); // String 型の値の場合はエスケープ必要
+bld.soqlWhereIn('Id', '\'00s4h00000216cCDXW\', \'00s5h00000336cFSRH\', \'00s7h00000686cJYZC\''); // String 型の値の場合はエスケープ必要
 
 // または
 
 Set<String> param = new Set<String>{'00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC'};
-sb.sqlWhereIn('Id', param);
+bld.soqlWhereIn('Id', param);
 
 // 上記のようにメソッドをコールすると、以下の WHERE IN 句の生成が予約される
 // WHERE Id IN ('00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC')
@@ -191,17 +191,17 @@ sb.sqlWhereIn('Id', param);
 
 ## WHERE NOT IN 構文メソッド
 ```apex
-sb.sqlWhereNotIn(fieldName, fieldValue); // fieldValue は Set 型でも可
+bld.soqlWhereNotIn(fieldName, fieldValue); // fieldValue は Set 型でも可
 ```
 
 使用例
 ```apex
-sb.sqlWhereNotIn('Id', '\'00s4h00000216cCDXW\', \'00s5h00000336cFSRH\', \'00s7h00000686cJYZC\''); // String 型の値の場合はエスケープ必要
+bld.soqlWhereNotIn('Id', '\'00s4h00000216cCDXW\', \'00s5h00000336cFSRH\', \'00s7h00000686cJYZC\''); // String 型の値の場合はエスケープ必要
 
 // または
 
 Set<String> param = new Set<String>{'00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC'};
-sb.sqlWhereNotIn('Id', param);
+bld.soqlWhereNotIn('Id', param);
 
 // 上記のようにメソッドをコールすると、以下の WHERE NOT IN 句の生成が予約される
 // WHERE Id NOT IN ('00s4h00000216cCDXW', '00s5h00000336cFSRH', '00s7h00000686cJYZC')
@@ -209,12 +209,12 @@ sb.sqlWhereNotIn('Id', param);
 
 ## LIMIT 構文メソッド
 ```apex
-sb.sqlLimit(limitValue);
+bld.soqlLimit(limitValue);
 ```
 
 使用例
 ```apex
-sb.sqlLimit(300);
+bld.soqlLimit(300);
 
 // 上記のようにメソッドをコールすると、以下の LIMIT 句の生成が予約される
 // LIMIT 300
@@ -222,11 +222,11 @@ sb.sqlLimit(300);
 
 ## OFFSET 構文メソッド
 ```apex
-sb.sqlOffset(offsetValue);
+bld.soqlOffset(offsetValue);
 ```
 
 ```apex
-sb.sqlOffset(100);
+bld.soqlOffset(100);
 
 // 上記のようにメソッドをコールすると、以下の OFFSET 句の生成が予約される
 // OFFSET 100
@@ -234,13 +234,13 @@ sb.sqlOffset(100);
 
 ## ORDER BY 構文メソッド
 ```apex
-sb.sqlOrderBy(fieldName, sortCondition);
+bld.soqlOrderBy(fieldName, sortCondition);
 ```
 
 使用例
 ```apex
-sb.sqlOrderBy('Name', 'DESC');
-sb.sqlOrderBy('Id', 'ASC');
+bld.soqlOrderBy('Name', 'DESC');
+bld.soqlOrderBy('Id', 'ASC');
 
 // 上記のようにメソッドをコールすると、以下の OEDER BY 句の生成が予約される
 // ORDER BY Name DESC, Id ASC
@@ -248,13 +248,13 @@ sb.sqlOrderBy('Id', 'ASC');
 
 ## GROUP BY 構文メソッド
 ```apex
-sb.sqlGroupBy(fieldName);
+bld.soqlGroupBy(fieldName);
 ```
 
 使用例 - 1
 ```apex
-sb.sqlGroupBy('Name');
-sb.sqlGroupBy('IsActive');
+bld.soqlGroupBy('Name');
+bld.soqlGroupBy('IsActive');
 
 // 上記のようにメソッドをコールすると、以下の GROUP BY 句の生成が予約される
 // GROUP BY Name, IsActive;
@@ -262,9 +262,9 @@ sb.sqlGroupBy('IsActive');
 
 使用例 - 2
 ```apex
-sb.sqlSelect('COUNT(Id), IsActive');
-sb.sqlGroupBy('IsActive');
-List<AggregateResult> userGroup = sb.sqlGet('User');
+bld.soqlSelect('COUNT(Id), IsActive');
+bld.soqlGroupBy('IsActive');
+List<AggregateResult> userGroup = bld.soqlGet('User');
 
 // 上記のメソッドコールは下記の処理と同様
 // List<AggregateResult> userGroup = [SELECT COUNT(Id), IsActive FROM User GROUP BY IsActive];
@@ -272,19 +272,19 @@ List<AggregateResult> userGroup = sb.sqlGet('User');
 
 ## HAVING 構文メソッド
 ```apex
-sb.sqlHaving(fieldName, fieldValue);
+bld.soqlHaving(fieldName, fieldValue);
 ```
 
 使用例 - 1
 ```apex
-sb.sqlHaving('COUNT(Id)', 3);
+bld.soqlHaving('COUNT(Id)', 3);
 
 // 上記のようにメソッドをコールすると、以下の HAVING 句の生成が予約される
 // HAVING COUNT(Id) = 3
 ```
 
 ```apex
-sb.sqlHaving('Name LIKE', '%御坂%');
+bld.soqlHaving('Name LIKE', '%御坂%');
 
 // キー名に比較演算子を含めることも可能（キー名と比較演算子の間にスペース必須）
 // HAVING Name LIKE '%御坂%'
@@ -292,8 +292,8 @@ sb.sqlHaving('Name LIKE', '%御坂%');
 
 使用例 - 2
 ```apex
-sb.sqlHaving('COUNT(Id) >', 3);
-sb.sqlHaving('Name LIKE', '%御坂%');
+bld.soqlHaving('COUNT(Id) >', 3);
+bld.soqlHaving('Name LIKE', '%御坂%');
 
 // 複数回コールすると AND 接続となる
 // HAVING COUNT(Id) > 3 AND Name = '%御坂%'
@@ -301,11 +301,11 @@ sb.sqlHaving('Name LIKE', '%御坂%');
 
 使用例 - 3
 ```apex
-sb.sqlSelect('COUNT(Id), Name, IsActive');
-sb.sqlGroupBy('IsActive');
-sb.sqlHaving('COUNT(Id) >', 3);
-sb.sqlHaving('Name LIKE', '%御坂%');
-List<AggregateResult> userGroup = sb.sqlGet('User');
+bld.soqlSelect('COUNT(Id), Name, IsActive');
+bld.soqlGroupBy('IsActive');
+bld.soqlHaving('COUNT(Id) >', 3);
+bld.soqlHaving('Name LIKE', '%御坂%');
+List<AggregateResult> userGroup = bld.soqlGet('User');
 
 // 上記のメソッドコールは下記の処理と同様
 // List<AggregateResult> userGroup = [SELECT COUNT(Id), Name, IsActive FROM User GROUP BY IsActive HAVING COUNT(Id) > 3 AND Name = '%御坂%'];
@@ -313,47 +313,47 @@ List<AggregateResult> userGroup = sb.sqlGet('User');
 
 ## ALL ROWS 構文メソッド
 ```apex
-sb.sqlAllRows();
+bld.soqlAllRows();
 ```
 
 使用例
 ```apex
-sb.sqlAllRows();
-sb.sqlSelect('Id, Name, IsDeleted');
-sb.sqlWhere('IsDeleted', true);
-List<User> userList = sb.sqlGet('User');
+bld.soqlAllRows();
+bld.soqlSelect('Id, Name, IsDeleted');
+bld.soqlWhere('IsDeleted', true);
+List<User> userList = bld.soqlGet('User');
 
 // 上記のメソッドコールは下記の処理と同様
 // List<User> userList = [SELECT Id, Name, IsDeleted FROM User WHERE IsDeleted = true ALL ROWS];
 ```
 
-## SQL 構文キャッシュメソッド
+## SOQL 構文キャッシュメソッド
 ```apex
-sb.sqlStartCache();
+bld.soqlStartCache();
 ```
 sqlGet, sqlQuery メソッドがコールされても、クエリを初期化せず保持する設定に切り替えられる。  
 リセットする場合は clear メソッドをコールする。
 
 使用例
 ```apex
-sb.sqlStartCache(); // クエリキャッシュの保持スタート
+bld.soqlStartCache(); // クエリキャッシュの保持スタート
 
-sb.sqlSelect('Id, Name');
-List<User> userList = sb.sqlGet('User'); // List<User> userList = [SELECT Id, Name FROM User];
+bld.soqlSelect('Id, Name');
+List<User> userList = bld.soqlGet('User'); // List<User> userList = [SELECT Id, Name FROM User];
 
-sb.sqlSelect('IsActive');
-sb.sqlWhere('IsActive', true);
-List<User> userList = sb.sqlGet('User'); // List<User> userList = [SELECT Id, Name, IsActive FROM User WHERE IsActive = true];
+bld.soqlSelect('IsActive');
+bld.soqlWhere('IsActive', true);
+List<User> userList = bld.soqlGet('User'); // List<User> userList = [SELECT Id, Name, IsActive FROM User WHERE IsActive = true];
 
-sb.clear(); // ここでリセット
+bld.clear(); // ここでリセット
 
-sb.sqlSelect('IsDeleted');
-List<User> userList = sb.sqlGet('User'); // List<User> userList = [SELECT IsDeleted FROM User];
+bld.soqlSelect('IsDeleted');
+List<User> userList = bld.soqlGet('User'); // List<User> userList = [SELECT IsDeleted FROM User];
 ```
 
-## SQL 構文の初期化メソッド
+## SOQL 構文の初期化メソッド
 ```apex
-sb.clear();
+bld.clear();
 ```
 クエリのリセットメソッド。  
 コンストラクタでもこのメソッドを呼び出している。  
@@ -361,46 +361,46 @@ sqlStartCache メソッドと共に用いる。
 
 使用例
 ```apex
-sb.sqlStartCache(); // クエリキャッシュの保持スタート
+bld.soqlStartCache(); // クエリキャッシュの保持スタート
 
-sb.sqlSelect('Id, Name');
-List<User> userList = sb.sqlGet('User'); // List<User> userList = [SELECT Id, Name FROM User];
+bld.soqlSelect('Id, Name');
+List<User> userList = bld.soqlGet('User'); // List<User> userList = [SELECT Id, Name FROM User];
 
-sb.clear(); // ここでリセット
+bld.clear(); // ここでリセット
 
-sb.sqlSelect('IsDeleted');
-List<Account> accList = sb.sqlGet('Account'); // List<Account> accList = [SELECT IsDeleted FROM Account];
+bld.soqlSelect('IsDeleted');
+List<Account> accList = bld.soqlGet('Account'); // List<Account> accList = [SELECT IsDeleted FROM Account];
 ```
 
-## ★SQL 構文の実行（レコードの取得）メソッド
-上述までの SQL 構文メソッドは SQL クエリ構築のための予約であり、それ単体ではクエリは実行されない。  
-この sqlGet メソッドを最後にコールすることで、SQL 構文メソッドにより構築されたクエリが実行され、レコードのリストが返却される。
+## ★SOQL 構文の実行（レコードの取得）メソッド
+上述までの SOQL 構文メソッドは SOQL クエリ構築のための予約であり、それ単体ではクエリは実行されない。  
+この sqlGet メソッドを最後にコールすることで、SOQL 構文メソッドにより構築されたクエリが実行され、レコードのリストが返却される。
 
 ```apex
-sb.sqlGet(sObjectName);
+bld.soqlGet(sObjectName);
 ```
 
 使用例
 ```apex
-List<Account> accList = sb.sqlGet('Account');
+List<Account> accList = bld.soqlGet('Account');
 
 // 上記のメソッドコールは下記の処理と同様
 // 「*」はこの例における便宜上で、実際はすべてのフィールドが羅列される
 // List<Account> queryList = [SELECT * FROM Account];
 ```
 
-## ★SQL 構文のクエリ生成メソッド
-sqlGet メソッドと同様に、この sqlQuery メソッドを最後にコールすることで、SQL 構文メソッドにより構築されたクエリが生成され、そのクエリ文字列が返却される。<注意> このメソッドではクエリは実行されない！
+## ★SOQL 構文のクエリ生成メソッド
+sqlGet メソッドと同様に、この sqlQuery メソッドを最後にコールすることで、SOQL 構文メソッドにより構築されたクエリが生成され、そのクエリ文字列が返却される。<注意> このメソッドではクエリは実行されない！
 
 ```apex
-sb.sqlQuery(sObjectName);
+bld.soqlQuery(sObjectName);
 ```
 
 使用例
 ```apex
-sb.sqlSelect('Id, Name');
-sb.sqlWhere('NumberOfEmployees >', 100);
-String query = sb.sqlQuery('Account');
+bld.soqlSelect('Id, Name');
+bld.soqlWhere('NumberOfEmployees >', 100);
+String query = bld.soqlQuery('Account');
 
 // 上記のメソッドコールは下記の処理と同様
 // String query = 'SELECT Id, Name FROM Account WHERE NumberOfEmployees > 100';
@@ -411,7 +411,7 @@ sObject のレコードを操作するメソッド。
 
 ## Insert（挿入）処理
 ```apex
-sb.sqlInsert(sObjectCollection, params);
+bld.soqlInsert(sObjectCollection, params);
 ```
 
 |引数|名称|型|説明|
@@ -432,7 +432,7 @@ params.put('BillingCountry', 'Japan');
 params.put('BillingState', 'Tokyo');
 params.put('NumberOfEmployees', 10091);
 
-result = sb.sqlInsert(acc, params);
+result = bld.soqlInsert(acc, params);
 
 // 成功時の result 値
 {
@@ -443,7 +443,7 @@ result = sb.sqlInsert(acc, params);
 
 使用例 - 2
 ```apex
-result = sb.sqlInsert(acc, params);
+result = bld.soqlInsert(acc, params);
 
 if ((Boolean)result.get('success')) {
     // Some process
@@ -459,7 +459,7 @@ if ((Boolean)result.get('success')) {
 上述の sqlInsert メソッドでも一括で挿入する処理は可能だが、このメソッドでは一部のレコードが失敗しても、残りのレコードに対して DML 操作を正常に完了できる。基盤の機能は Database.insert() の第二引数が false の場合を活用している。
 
 ```apex
-sb.sqlInsertAll(sObjectCollection, params);
+bld.soqlInsertAll(sObjectCollection, params);
 ```
 
 |引数|名称|型|説明|
@@ -483,12 +483,12 @@ params.put('BillingCountry', 'Japan');
 params.put('BillingState', 'Tokyo');
 params.put('NumberOfEmployees', 10091);
 
-srList = sb.sqlInsertAll(accList, params);
+srList = bld.soqlInsertAll(accList, params);
 ```
 
 使用例 - 2
 ```apex
-srList = sb.sqlInsertAll(acc, params);
+srList = bld.soqlInsertAll(acc, params);
 
 for (Database.SaveResult sr : srList) {
     if (sr.isSuccess()) {
@@ -506,7 +506,7 @@ for (Database.SaveResult sr : srList) {
 
 ## Update（更新）処理
 ```apex
-sb.sqlUpdate(sObjectCollection, params);
+bld.soqlUpdate(sObjectCollection, params);
 ```
 
 |引数|名称|型|説明|
@@ -519,8 +519,8 @@ sb.sqlUpdate(sObjectCollection, params);
 Map<String, Object> params = new Map<String, Object>{};
 Map<String, Object> result = new Map<String, Object>{};
 
-sb.sqlSelect('Id');
-List<Account> accList = sb.sqlGet('Account');
+bld.soqlSelect('Id');
+List<Account> accList = bld.soqlGet('Account');
 
 params.put('Name', 'Sisters');
 params.put('BillingCity', 'Academic city');
@@ -528,7 +528,7 @@ params.put('BillingCountry', 'Japan');
 params.put('BillingState', 'Tokyo');
 params.put('NumberOfEmployees', 20001);
 
-result = sb.sqlUpdate(accList, params);
+result = bld.soqlUpdate(accList, params);
 
 // 成功時の result 値
 {
@@ -539,7 +539,7 @@ result = sb.sqlUpdate(accList, params);
 
 使用例 - 2
 ```apex
-result = sb.sqlUpdate(acc, params);
+result = bld.soqlUpdate(acc, params);
 
 if ((Boolean)result.get('success')) {
     // Some process
@@ -555,7 +555,7 @@ if ((Boolean)result.get('success')) {
 上述の sqlUpdate メソッドでも一括で更新する処理は可能だが、このメソッドでは一部のレコードが失敗しても、残りのレコードに対して DML 操作を正常に完了できる。基盤の機能は Database.update() の第二引数が false の場合を活用している。
 
 ```apex
-sb.sqlUpdateAll(sObjectCollection, params);
+bld.soqlUpdateAll(sObjectCollection, params);
 ```
 
 |引数|名称|型|説明|
@@ -568,8 +568,8 @@ sb.sqlUpdateAll(sObjectCollection, params);
 Map<String, Object> params = new Map<String, Object>{};
 List<Database.SaveResult> srList = new List<Database.SaveResult>();
 
-sb.sqlSelect('Id');
-List<Account> accList = sb.sqlGet('Account');
+bld.soqlSelect('Id');
+List<Account> accList = bld.soqlGet('Account');
 
 params.put('Name', 'Misaka10091');
 params.put('BillingCity', 'Academic city');
@@ -577,12 +577,12 @@ params.put('BillingCountry', 'Japan');
 params.put('BillingState', 'Tokyo');
 params.put('NumberOfEmployees', 10091);
 
-srList = sb.sqlUpdateAll(accList, params);
+srList = bld.soqlUpdateAll(accList, params);
 ```
 
 使用例 - 2
 ```apex
-srList = sb.sqlUpdateAll(acc, params);
+srList = bld.soqlUpdateAll(acc, params);
 
 for (Database.SaveResult sr : srList) {
     if (sr.isSuccess()) {
@@ -600,7 +600,7 @@ for (Database.SaveResult sr : srList) {
 
 ## Upsert（更新 / 挿入）処理
 ```apex
-sb.sqlUpsert(sObjectCollection, params);
+bld.soqlUpsert(sObjectCollection, params);
 ```
 
 |引数|名称|型|説明|
@@ -613,8 +613,8 @@ sb.sqlUpsert(sObjectCollection, params);
 Map<String, Object> params = new Map<String, Object>{};
 Map<String, Object> result = new Map<String, Object>{};
 
-sb.sqlSelect('Id');
-List<Account> accList = sb.sqlGet('Account');
+bld.soqlSelect('Id');
+List<Account> accList = bld.soqlGet('Account');
 
 params.put('Name', 'Sisters');
 params.put('BillingCity', 'Academic city');
@@ -625,7 +625,7 @@ params.put('NumberOfEmployees', 20001);
 Account newAcc = new Account(Name = 'Last Order', BillingCity = 'Academic city');
 accList.add(newAcc);
 
-result = sb.sqlUpsert(accList, params);
+result = bld.soqlUpsert(accList, params);
 
 // 成功時の result 値
 {
@@ -636,7 +636,7 @@ result = sb.sqlUpsert(accList, params);
 
 使用例 - 2
 ```apex
-result = sb.sqlUpsert(acc, params);
+result = bld.soqlUpsert(acc, params);
 
 if ((Boolean)result.get('success')) {
     // Some process
@@ -650,7 +650,7 @@ if ((Boolean)result.get('success')) {
 
 ## Delete（削除）処理
 ```apex
-sb.sqlDelete(sObjectCollection);
+bld.soqlDelete(sObjectCollection);
 ```
 
 |引数|名称|型|説明|
@@ -661,10 +661,10 @@ sb.sqlDelete(sObjectCollection);
 ```apex
 Map<String, Object> result = new Map<String, Object>{};
 
-sb.sqlSelect('Id');
-List<Account> accList = sb.sqlGet('Account');
+bld.soqlSelect('Id');
+List<Account> accList = bld.soqlGet('Account');
 
-result = sb.sqlDelete(accList);
+result = bld.soqlDelete(accList);
 
 // 成功時の result 値
 {
@@ -675,7 +675,7 @@ result = sb.sqlDelete(accList);
 
 使用例 - 2
 ```apex
-result = sb.sqlDelete(acc);
+result = bld.soqlDelete(acc);
 
 if ((Boolean)result.get('success')) {
     // Some process
@@ -687,7 +687,7 @@ if ((Boolean)result.get('success')) {
 }
 ```
 
-# 「SQL 構文メソッド」の再利用
+# 「SOQL 構文メソッド」の再利用
 一度の処理で複数の sObject 操作を行う場合、大きく分けて 2 つの方法がある。
 ## ① 各 sObject の処理ごとにクラスを呼び出す
 ```apex
@@ -707,20 +707,20 @@ List<Contact> con = mdl_3.sqlGet('Contact');
 ```
 
 しかし、これでは変数の管理で不利な面もある。  
-SQL 構文メソッドは、クエリが実行される度に初期化されるので、インスタンスの再生成は不要である。
+SOQL 構文メソッドは、クエリが実行される度に初期化されるので、インスタンスの再生成は不要である。
 
 ## ② sqlGet, sqlQuery メソッドのコール後はクエリが初期化される
 ```apex
-SOQLBuilder sb = new SOQLBuilder(); // sb インスタンスの生成（ここで1度だけ）
+SOQLBuilder bld = new SOQLBuilder(); // bld インスタンスの生成（ここで1度だけ）
 
-sb.sqlSelect('Id, Name');
-List<User> user = sb.sqlGet('User'); // ここでクエリも初期化
+bld.soqlSelect('Id, Name');
+List<User> user = bld.soqlGet('User'); // ここでクエリも初期化
 
-sb.sqlSelect('Id, Name');
-sb.sqlWhere('Id', '00s4h00000216cCDXW');
-List<Account> acc = sb.sqlGet('Account'); // ここでクエリも初期化
+bld.soqlSelect('Id, Name');
+bld.soqlWhere('Id', '00s4h00000216cCDXW');
+List<Account> acc = bld.soqlGet('Account'); // ここでクエリも初期化
 
-sb.sqlSelect('Id, Name');
-sb.sqlLimit(20);
-List<Contact> con = sb.sqlGet('Contact'); // ここでクエリも初期化
+bld.soqlSelect('Id, Name');
+bld.soqlLimit(20);
+List<Contact> con = bld.soqlGet('Contact'); // ここでクエリも初期化
 ```
