@@ -10,27 +10,20 @@ On this occasion, SOQLBuilder class has been defiened to solve this problem. The
 
 Document: https://github.com/BruceWeyne/Apex-SOQLBuilder/tree/main/Document/English
 
-# はじめに
-Apex での sObject の DML 操作は [SOQL](https://developer.salesforce.com/docs/atlas.ja-jp.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_sosl_intro.htm) と呼ばれる Salesforce 独自の言語が必要となり、開発において都度クエリを記述する必要がある。クエリの絞り込みが多くなるにつれてコードは冗長化し、動的なクエリの記述は難しくなる。  
-この課題を解決する目的として、SOQLBuilder クラスを定義することにした。このクラスは、フレームワークの概念である MVC を参考にして、「モデル」機能の一部の動作を模倣するものである。これにより、SOQL クエリを直書きするよりも簡略的で可読性、可変性、可用性の高い記法の実現を目指している。
-
-ドキュメント: https://github.com/BruceWeyne/Apex-SOQLBuilder/tree/main/Document/Japanese
-
-
 # Sample of usage
 ## Sample 1
 ```apex
-sb.sqlSelect('Id');
-sb.sqlSelect('Name');
-sb.sqlSelect('Alias');
-List<User> user = sb.sqlGet('User');
+bld.soqlSelect('Id');
+bld.soqlSelect('Name');
+bld.soqlSelect('Alias');
+List<User> user = bld.soqlGet('User');
 ```
 
 Or in another way,
 
 ```apex
-sb.sqlSelect('Id, Name, Alias');
-List<User> user = sb.sqlGet('User');
+bld.soqlSelect('Id, Name, Alias');
+List<User> user = bld.soqlGet('User');
 ```
 
 The method call like above is exactly the same thing as following.
@@ -48,16 +41,16 @@ List<User> user = [
 
 ## Sample 2
 ```apex
-sb.sqlSelect('*');
-sb.sqlWhere('Id', '00s4h00000216cCDXW');
-List<Account> accList = sb.sqlGet('Account');
+bld.soqlSelect('*');
+bld.soqlWhere('Id', '00s4h00000216cCDXW');
+List<Account> accList = bld.soqlGet('Account');
 ```
 
 Or in another way,
 
 ```apex
-sb.sqlWhere('Id', '00s4h00000216cCDXW');
-List<Account> accList = sb.sqlGet('Account');
+bld.soqlWhere('Id', '00s4h00000216cCDXW');
+List<Account> accList = bld.soqlGet('Account');
 ```
 
 The method call like above is exactly the same thing as following.
@@ -121,13 +114,13 @@ List<Account> accList = [
 
 ## Sample 3
 ```apex
-sb.sqlSelect('Id, Name');
+bld.soqlSelect('Id, Name');
 
 for (Integer i = 0; i < 100; i++) {
-    sb.sqlOrWhere('Name', 'Misaka' + i);
+    bld.soqlOrWhere('Name', 'Misaka' + i);
 }
 
-List<Account> accList = sb.sqlGet('Account');
+List<Account> accList = bld.soqlGet('Account');
 ```
 
 The method call like above is exactly the same thing as following.
@@ -154,18 +147,18 @@ Integer limitVal  = (Integer)req.params.get('limit');
 Integer offsetVal = (Integer)req.params.get('offset');
 
 // Construct SOQL Query
-sb.sqlSelect('Id, Name, Phone');
+bld.soqlSelect('Id, Name, Phone');
 
 // Only when parameters are set
 if (limitVal != null) { // When Not null
-    sb.sqlLimit(limitVal);
+    bld.soqlLimit(limitVal);
 }
 if (offsetVal != null) { // When Not null
-    sb.sqlOffset(offsetVal);
+    bld.soqlOffset(offsetVal);
 }
 
 // Execute Query
-List<Account> accList = sb.sqlGet('Account');
+List<Account> accList = bld.soqlGet('Account');
 ```
 
 The method call like above is exactly the same thing as following.
@@ -207,12 +200,12 @@ Map<String, Object> params = (Map<String, Object>)JSON.deserializeUntyped(req.re
 String accName = (String)params.get('Name');
 
 // Get sObject record of the Name
-sb.sqlSelect('Id');
-sb.sqlWhere('Name', accName);
-List<Account> accList = sb.sqlGet('Account');
+bld.soqlSelect('Id');
+bld.soqlWhere('Name', accName);
+List<Account> accList = bld.soqlGet('Account');
 
 // DML Operation
-Map<String, Object> result = sb.sqlUpdate(accList, params); // Just simply assign "params" variable
+Map<String, Object> result = bld.soqlUpdate(accList, params); // Just simply assign "params" variable
 
 // Verify result
 if (! (Boolean)result.get('success') ) { // When failed
@@ -222,20 +215,26 @@ if (! (Boolean)result.get('success') ) { // When failed
 }
 ```
 
+# はじめに
+Apex での sObject の DML 操作は [SOQL](https://developer.salesforce.com/docs/atlas.ja-jp.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_sosl_intro.htm) と呼ばれる Salesforce 独自の言語が必要となり、開発において都度クエリを記述する必要がある。クエリの絞り込みが多くなるにつれてコードは冗長化し、動的なクエリの記述は難しくなる。  
+この課題を解決する目的として、SOQLBuilder クラスを定義することにした。このクラスは、フレームワークの概念である MVC を参考にして、「モデル」機能の一部の動作を模倣するものである。これにより、SOQL クエリを直書きするよりも簡略的で可読性、可変性、可用性の高い記法の実現を目指している。
+
+ドキュメント: https://github.com/BruceWeyne/Apex-SOQLBuilder/tree/main/Document/Japanese
+
 # 使用方法サンプル
 ## 例1
 ```apex
-sb.sqlSelect('Id');
-sb.sqlSelect('Name');
-sb.sqlSelect('Alias');
-List<User> user = sb.sqlGet('User');
+bld.soqlSelect('Id');
+bld.soqlSelect('Name');
+bld.soqlSelect('Alias');
+List<User> user = bld.soqlGet('User');
 ```
 
 または
 
 ```apex
-sb.sqlSelect('Id, Name, Alias');
-List<User> user = sb.sqlGet('User');
+bld.soqlSelect('Id, Name, Alias');
+List<User> user = bld.soqlGet('User');
 ```
 
 上記のメソッドコールは下記の処理と同様
@@ -253,16 +252,16 @@ List<User> user = [
 
 ## 例2
 ```apex
-sb.sqlSelect('*');
-sb.sqlWhere('Id', '00s4h00000216cCDXW');
-List<Account> accList = sb.sqlGet('Account');
+bld.soqlSelect('*');
+bld.soqlWhere('Id', '00s4h00000216cCDXW');
+List<Account> accList = bld.soqlGet('Account');
 ```
 
 または
 
 ```apex
-sb.sqlWhere('Id', '00s4h00000216cCDXW');
-List<Account> accList = sb.sqlGet('Account');
+bld.soqlWhere('Id', '00s4h00000216cCDXW');
+List<Account> accList = bld.soqlGet('Account');
 ```
 
 上記のメソッドコールは下記の処理と同様
@@ -326,13 +325,13 @@ List<Account> accList = [
 
 ## 例3
 ```apex
-sb.sqlSelect('Id, Name');
+bld.soqlSelect('Id, Name');
 
 for (Integer i = 0; i < 100; i++) {
-    sb.sqlOrWhere('Name', 'Misaka' + i);
+    bld.soqlOrWhere('Name', 'Misaka' + i);
 }
 
-List<Account> accList = sb.sqlGet('Account');
+List<Account> accList = bld.soqlGet('Account');
 ```
 
 上記のメソッドコールは下記の処理と同様
@@ -359,18 +358,18 @@ Integer limitVal  = (Integer)req.params.get('limit');
 Integer offsetVal = (Integer)req.params.get('offset');
 
 // SOQL クエリの構築
-sb.sqlSelect('Id, Name, Phone');
+bld.soqlSelect('Id, Name, Phone');
 
 // URL クエリパラメータが設定されている場合のみ
 if (limitVal != null) { // When Not null
-    sb.sqlLimit(limitVal);
+    bld.soqlLimit(limitVal);
 }
 if (offsetVal != null) { // When Not null
-    sb.sqlOffset(offsetVal);
+    bld.soqlOffset(offsetVal);
 }
 
 // クエリを実行
-List<Account> accList = sb.sqlGet('Account');
+List<Account> accList = bld.soqlGet('Account');
 ```
 
 The method call like above is exactly the same thing as following.
@@ -412,12 +411,12 @@ Map<String, Object> params = (Map<String, Object>)JSON.deserializeUntyped(req.re
 String accName = (String)params.get('Name');
 
 // 該当の Name を持つレコードを取得
-sb.sqlSelect('Id');
-sb.sqlWhere('Name', accName);
-List<Account> accList = sb.sqlGet('Account');
+bld.soqlSelect('Id');
+bld.soqlWhere('Name', accName);
+List<Account> accList = bld.soqlGet('Account');
 
 // DML 操作
-Map<String, Object> result = sb.sqlUpdate(accList, params); // Just simply assign "params" variable
+Map<String, Object> result = bld.soqlUpdate(accList, params); // Just simply assign "params" variable
 
 // 結果の検証
 if (! (Boolean)result.get('success') ) { // 失敗の場合
