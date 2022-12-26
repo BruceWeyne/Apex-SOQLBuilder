@@ -139,7 +139,7 @@ List<Account> accList = [
 
 ## Sample 4
 ```apex
-SOQLBuilder sb = new SOQLBuilder();
+SOQLBuilder bld = new SOQLBuilder();
 RestRequest req = RestContext.request;
 
 // Get URL Query Parameters
@@ -164,7 +164,7 @@ List<Account> accList = bld.soqlGet('Account');
 The method call like above is exactly the same thing as following.
 
 ```apex
-SOQLBuilder sb = new SOQLBuilder();
+SOQLBuilder bld = new SOQLBuilder();
 RestRequest req = RestContext.request;
 
 // Get URL Query Parameters
@@ -186,7 +186,7 @@ if (limitVal != null && offsetVal != null) {
 
 ## Sample 5
 ```apex
-SOQLBuilder sb = new SOQLBuilder();
+SOQLBuilder bld = new SOQLBuilder();
 
 RestRequest req = RestContext.request; // Rest API Context
 
@@ -350,7 +350,7 @@ List<Account> accList = [
 
 ## 例 4
 ```apex
-SOQLBuilder sb = new SOQLBuilder();
+SOQLBuilder bld = new SOQLBuilder();
 RestRequest req = RestContext.request;
 
 // URL クエリパラメータを取得
@@ -375,7 +375,7 @@ List<Account> accList = bld.soqlGet('Account');
 The method call like above is exactly the same thing as following.
 
 ```apex
-SOQLBuilder sb = new SOQLBuilder();
+SOQLBuilder bld = new SOQLBuilder();
 RestRequest req = RestContext.request;
 
 // URL クエリパラメータを取得
@@ -397,7 +397,7 @@ if (limitVal != null && offsetVal != null) {
 
 ## 例5
 ```apex
-SOQLBuilder sb = new SOQLBuilder();
+SOQLBuilder bld = new SOQLBuilder();
 
 RestRequest req = RestContext.request; // Rest API Context
 
