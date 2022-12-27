@@ -11,6 +11,11 @@ On this occasion, SOQLBuilder class has been defiened to solve this problem. The
 Document: https://github.com/BruceWeyne/Apex-SOQLBuilder/tree/main/Document/English
 
 # Sample of usage
+## Sample 0
+```apex
+SOQLBuilder bld = new SOQLBuilder(); // Create the class instance
+```
+
 ## Sample 1
 ```apex
 bld.soqlSelect('Id');
@@ -222,6 +227,11 @@ Apex での sObject の DML 操作は [SOQL](https://developer.salesforce.com/do
 ドキュメント: https://github.com/BruceWeyne/Apex-SOQLBuilder/tree/main/Document/Japanese
 
 # 使用方法サンプル
+## 例 0
+```apex
+SOQLBuilder bld = new SOQLBuilder(); // クラスインスタンスの生成
+```
+
 ## 例1
 ```apex
 bld.soqlSelect('Id');
